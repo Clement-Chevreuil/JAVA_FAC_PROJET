@@ -22,8 +22,7 @@ public class FilterNotConnectedOrNotAdmin implements Filter {
 
         System.out.println("filter execution");
         HttpSession session = ((HttpServletRequest) request).getSession(false);
-        System.out.println("session " + session);
-        if (session.getAttribute("user") == null || session == null) {
+        if (session.getAttribute("user") == null ) {
             System.out.println("session null");
             //((HttpServletRequest) request).getRequestDispatcher("index.jsp").include(request, response);
             ((HttpServletResponse) response).sendRedirect("index.jsp");

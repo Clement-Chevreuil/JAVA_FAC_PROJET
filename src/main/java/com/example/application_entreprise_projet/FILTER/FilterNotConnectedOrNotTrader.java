@@ -21,8 +21,7 @@ public class FilterNotConnectedOrNotTrader implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         System.out.println("filter execution");
         HttpSession session = ((HttpServletRequest) request).getSession(false);
-        System.out.println("session " + session);
-        if (session.getAttribute("user") == null || session == null) {
+        if (session.getAttribute("user") == null) {
             System.out.println("session null");
             //((HttpServletRequest) request).getRequestDispatcher("index.jsp").include(request, response);
             ((HttpServletResponse) response).sendRedirect("index.jsp");

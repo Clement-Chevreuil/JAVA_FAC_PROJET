@@ -20,7 +20,7 @@ public class FilterIsLog implements Filter {
 
         HttpSession session = ((HttpServletRequest) request).getSession(false);
 
-        if (session.getAttribute("user") != null || session != null) {
+        if (session.getAttribute("user") != null ) {
             System.out.println("session exist");
             ((HttpServletResponse) response).sendRedirect("index.jsp");
         }

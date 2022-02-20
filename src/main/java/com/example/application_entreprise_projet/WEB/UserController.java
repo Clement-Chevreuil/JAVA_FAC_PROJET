@@ -59,9 +59,18 @@ public class UserController extends HttpServlet {
 
             if(userValidation.getAdmin() == true) {return "admin";}
             else if(userValidation.getTrader() == true) {return "trader";}
-            else {return "client";}
+            else {return "consumer";}
         }
         else {return "erreur";}
+
+    }
+
+    @RequestMapping("/Deconnexion")
+    public void deconnexion(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        HttpSession session = request.getSession();
+        session.setAttribute("user", null);
+        ((HttpServletResponse) response).sendRedirect("index.jsp");
 
     }
 
