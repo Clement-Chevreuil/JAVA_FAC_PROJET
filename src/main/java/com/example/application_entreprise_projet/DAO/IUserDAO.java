@@ -8,6 +8,7 @@ import java.util.List;
 public interface IUserDAO {
 
     public void addUser (User u) throws SQLException;
+    public User connexionUser (User u) throws SQLException;
     public List<User> getAllUsers();
     public User getUser(int id);
     public void updateUser (User u);

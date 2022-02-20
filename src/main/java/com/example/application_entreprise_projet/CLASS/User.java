@@ -26,6 +26,11 @@ public class User {
         this.trader = trader;
     }
 
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     public User(int id) {
         this.id = id;
     }

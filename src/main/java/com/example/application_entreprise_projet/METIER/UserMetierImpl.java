@@ -19,6 +19,11 @@ public class UserMetierImpl implements IUserMetier {
         dao.addUser(u);
     }
 
+    @Override
+    public User connexion(User u) throws SQLException {
+        return dao.connexionUser(u);
+    }
+
     public User find(int id) {
 
         return dao.getUser(id);

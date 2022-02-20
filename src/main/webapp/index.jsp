@@ -8,8 +8,10 @@
 <h1><%= "WELCOME TO ANTI-WASTE WEBSITE" %>
 </h1>
 <br/>
-    <a href="login.jsp">Connexion</a>
+    <a href="login">login</a>
     <a href="register">Register</a>
-    <a href="index">Admin</a>
+    <a href="AdminIndex">Admin</a>
+    <a href="ConsumerIndex">Consumer</a>
+    <a href="TraderIndex">Trader</a>
 </body>
 </html>

@@ -2,10 +2,8 @@ package com.example.application_entreprise_projet.DAO;
 
 import com.example.application_entreprise_projet.CLASS.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import javax.servlet.http.HttpSession;
+import java.sql.*;
 import java.util.*;
 
 public class UserDAOImpl implements IUserDAO {
@@ -62,6 +60,36 @@ public class UserDAOImpl implements IUserDAO {
         statement.close();
         disconnect();
 
+    }
+
+    @Override
+    public User connexionUser(User u) throws SQLException {
+        User user = null;
+        String sql = "SELECT * FROM user WHERE email = 4";
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        //statement.setString(1, u.getEmail());
+
+        ResultSet result = statement.executeQuery(sql);
+
+        if (result.next()) {
+
+            int id = result.getInt("id");
+            String email = result.getString("email");
+            String password = result.getString("password");
+            String country = result.getString("country");
+            String city = result.getString("city");
+            int postCode = result.getInt("postCode");
+            String street = result.getString("street");
+            Boolean admin = result.getBoolean("admin");
+            Boolean trader = result.getBoolean("trader");
+            user = new User(id, email, password, country, city, postCode, street, admin, trader);
+        }
+
+        statement.close();
+        disconnect();
+
+        return user;
     }
 
     public List<User> getAllUsers() {

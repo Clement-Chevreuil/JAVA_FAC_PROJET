@@ -7,7 +7,11 @@ import java.util.List;
 
 public interface IUserMetier {
 
+    //WITH BDD
     public void add(User u) throws SQLException;
+    public User connexion(User u) throws SQLException;
+
+    //NO BDD
     public User find(int id);
     public List<User> findAll ();
     public void update(User u);
