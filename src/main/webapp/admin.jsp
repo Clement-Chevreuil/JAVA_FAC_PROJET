@@ -10,8 +10,6 @@
 </head>
 <body>
 <%--@elvariable id="user" type="com.example.application_entreprise_projet.CLASS.User"--%>
-
-
 <table>
     <tr>
         <th>ID</th>
@@ -20,13 +18,45 @@
         <th>EDIT</th>
         <th>DELETE</th>
     </tr>
-    <c:forEach items="${users}" var="u">
+    <c:forEach items="${consumers}" var="u">
         <tr>
             <td>${u.id}</td>
             <td>${u.email}</td>
             <td>${u.trader}</td>
             <td><a href="deleteUser?id=${u.id}">Delete</a></td>
             <td><a href="editUser?id=${u.id}">Edit</a></td>
+        </tr>
+    </c:forEach>
+</table>
+
+<br>
+<br>
+<br>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>EMAIL</th>
+        <th>TRADER</th>
+        <th>EDIT</th>
+        <th>DELETE</th>
+        <th>ACCEPT</th>
+    </tr>
+    <c:forEach items="${traders}" var="t">
+        <tr>
+            <td>${t.id}</td>
+            <td>${t.email}</td>
+            <td>${t.trader}</td>
+            <td><a href="deleteUser?id=${t.id}">Delete</a></td>
+            <td><a href="editUser?id=${t.id}">Edit</a></td>
+            <td>
+                <c:if test="${t.traderValidation == false}">
+                    <a type="button" href="ValidationTrader?id=${t.id}" >ACCEPT</a>
+                </c:if>
+                <c:if test="${t.traderValidation == true}">
+                    <p> Validated</p>
+                </c:if>
+            </td>
         </tr>
     </c:forEach>
 </table>

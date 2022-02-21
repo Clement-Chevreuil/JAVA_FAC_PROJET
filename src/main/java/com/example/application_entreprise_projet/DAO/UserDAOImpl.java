@@ -44,7 +44,7 @@ public class UserDAOImpl implements IUserDAO {
 
     public void addUser(User u) throws SQLException {
         RepoUsers.put(u.getId(), u);
-        String sql = "INSERT INTO User (id, email , password, country, city, postCode, street, admin, trader) VALUES (?, ?, ?,?,?,?,?,false,?)";
+        String sql = "INSERT INTO User (id, email , password, country, city, postCode, street, admin, trader, traderValidation) VALUES (?, ?, ?,?,?,?,?,false,?,false)";
         connect();
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
         statement.setInt(1, u.getId());
@@ -65,12 +65,15 @@ public class UserDAOImpl implements IUserDAO {
     @Override
     public User connexionUser(User u) throws SQLException {
         User user = null;
-        String sql = "SELECT * FROM user WHERE email = 4";
+
+
+        String sql = "SELECT * FROM user WHERE email = ? AND password = ?";
         connect();
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        //statement.setString(1, u.getEmail());
+        statement.setString(1, u.getEmail());
+        statement.setString(2, u.getPassword());
 
-        ResultSet result = statement.executeQuery(sql);
+        ResultSet result = statement.executeQuery();
 
         if (result.next()) {
 
@@ -83,7 +86,8 @@ public class UserDAOImpl implements IUserDAO {
             String street = result.getString("street");
             Boolean admin = result.getBoolean("admin");
             Boolean trader = result.getBoolean("trader");
-            user = new User(id, email, password, country, city, postCode, street, admin, trader);
+            Boolean traderValidation = result.getBoolean("traderValidation");
+            user = new User(id, email, password, country, city, postCode, street, admin, trader, traderValidation);
         }
 
         statement.close();
@@ -92,9 +96,98 @@ public class UserDAOImpl implements IUserDAO {
         return user;
     }
 
-    public List<User> getAllUsers() {
-        Collection<User> res= RepoUsers.values();
-        return new ArrayList<User>(res);
+    public List<User> getAllUsers() throws SQLException {
+        List<User> listUser = new ArrayList<>();
+        String sql = "SELECT * FROM user";
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        //statement.setString(1, u.getEmail());
+
+        ResultSet result = statement.executeQuery(sql);
+
+        while (result.next()) {
+
+            int id = result.getInt("id");
+            String email = result.getString("email");
+            String password = result.getString("password");
+            String country = result.getString("country");
+            String city = result.getString("city");
+            int postCode = result.getInt("postCode");
+            String street = result.getString("street");
+            Boolean admin = result.getBoolean("admin");
+            Boolean trader = result.getBoolean("trader");
+            Boolean traderValidation = result.getBoolean("traderValidation");
+            User user = new User(id, email, password, country, city, postCode, street, admin, trader, traderValidation);
+            listUser.add(user);
+        }
+
+        statement.close();
+        disconnect();
+
+        return listUser;
+    }
+
+    public List<User> getAllTraders() throws SQLException {
+        List<User> listUser = new ArrayList<>();
+        String sql = "SELECT * FROM user";
+
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        //statement.setString(1, u.getEmail());
+
+        ResultSet result = statement.executeQuery(sql);
+
+        while (result.next()) {
+
+            int id = result.getInt("id");
+            String email = result.getString("email");
+            String password = result.getString("password");
+            String country = result.getString("country");
+            String city = result.getString("city");
+            int postCode = result.getInt("postCode");
+            String street = result.getString("street");
+            Boolean admin = result.getBoolean("admin");
+            Boolean trader = result.getBoolean("trader");
+            Boolean traderValidation = result.getBoolean("traderValidation");
+            User user = new User(id, email, password, country, city, postCode, street, admin, trader, traderValidation);
+            listUser.add(user);
+        }
+
+        statement.close();
+        disconnect();
+
+        return listUser;
+    }
+
+    public List<User> getAllConsumers() throws SQLException {
+        List<User> listUser = new ArrayList<>();
+        String sql = "SELECT * FROM user WHERE trader = 0 AND admin = 0";
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        //statement.setString(1, u.getEmail());
+
+        ResultSet result = statement.executeQuery(sql);
+
+        while (result.next()) {
+
+            int id = result.getInt("id");
+            String email = result.getString("email");
+            String password = result.getString("password");
+            String country = result.getString("country");
+            String city = result.getString("city");
+            int postCode = result.getInt("postCode");
+            String street = result.getString("street");
+            Boolean admin = result.getBoolean("admin");
+            Boolean trader = result.getBoolean("trader");
+            Boolean traderValidation = result.getBoolean("traderValidation");
+            User user = new User(id, email, password, country, city, postCode, street, admin, trader, traderValidation);
+            listUser.add(user);
+        }
+
+        statement.close();
+        disconnect();
+
+        return listUser;
     }
 
     public User getUser(int id) {
@@ -102,8 +195,40 @@ public class UserDAOImpl implements IUserDAO {
         return RepoUsers.get(id);
     }
 
-    public void updateUser(User u) {
+    public void updateUser(User u) throws SQLException {
         RepoUsers.put(u.getId(),u);
+        String sql = "UPDATE User SET email = ?, password = ?, admin = false, trader = ?, country = ?, city = ?, postCode = ?, city = ?, traderValidation = ?";
+        sql += " WHERE user = ?";
+        connect();
+
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setString(1, u.getEmail());
+        statement.setString(2, u.getPassword());
+        statement.setBoolean(3, u.getTrader());
+        statement.setString(4, u.getCountry());
+        statement.setString(5, u.getCity());
+        statement.setInt(6, u.getPostCode());
+        statement.setString(7, u.getCity());
+        statement.setBoolean(8, u.getTraderValidation());
+        statement.setInt(9, u.getId());
+
+        boolean rowUpdated = statement.executeUpdate() > 0;
+        statement.close();
+        disconnect();
+
+    }
+
+    public void validateTrader(int id) throws SQLException {
+        String sql = "UPDATE User SET traderValidation = 1";
+        sql += " WHERE id = ?";
+        connect();
+
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, id);
+
+        boolean rowUpdated = statement.executeUpdate() > 0;
+        statement.close();
+        disconnect();
 
     }
 

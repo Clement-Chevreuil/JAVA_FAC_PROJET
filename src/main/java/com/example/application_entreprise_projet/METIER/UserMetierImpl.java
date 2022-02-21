@@ -29,14 +29,29 @@ public class UserMetierImpl implements IUserMetier {
         return dao.getUser(id);
     }
 
-    public List<User> findAll() {
+    public List<User> findAll() throws SQLException {
 
         return dao.getAllUsers();
     }
 
-    public void update(User u) {
+    @Override
+    public List<User> findAllConsumers() throws SQLException {
+        return dao.getAllConsumers();
+    }
+
+    @Override
+    public List<User> findAllTraders() throws SQLException {
+        return dao.getAllTraders();
+    }
+
+    public void update(User u) throws SQLException {
         dao.updateUser(u);
 
+    }
+
+    @Override
+    public void validationTrader(int i) throws SQLException {
+        dao.validateTrader(i);
     }
 
     public void delete(User u) {

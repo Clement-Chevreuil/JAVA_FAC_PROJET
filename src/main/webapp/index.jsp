@@ -9,7 +9,7 @@
 <h1><%= "WELCOME TO ANTI-WASTE WEBSITE" %>
 </h1>
 <br/>
-    <a href="login">login</a>
+    <a href="login">Login</a>
     <a href="register">Register</a>
     <a href="AdminIndex">Admin</a>
     <a href="ConsumerIndex">Consumer</a>

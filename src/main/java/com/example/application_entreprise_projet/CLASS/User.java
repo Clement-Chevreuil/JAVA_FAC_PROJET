@@ -11,10 +11,11 @@ public class User {
     String country;
     Boolean admin;
     Boolean trader;
+    Boolean traderValidation;
 
     //CONSTRUCTOR
 
-    public User(int id, String email, String password, String country, String city, int postCode, String street, Boolean admin, Boolean trader) {
+    public User(int id, String email, String password, String country, String city, int postCode, String street, Boolean admin, Boolean trader, Boolean traderValidation) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -24,6 +25,7 @@ public class User {
         this.country = country;
         this.admin = admin;
         this.trader = trader;
+        this.traderValidation = traderValidation;
     }
 
     public User(String email, String password) {
@@ -48,6 +50,7 @@ public class User {
     public String getCity() {return city;}
     public String getStreet() {return street;}
     public String getCountry() {return country;}
+    public Boolean getTraderValidation() {return traderValidation;}
 
     //SETTER
 
@@ -60,4 +63,5 @@ public class User {
     public void setCountry(String country) {this.country = country;}
     public void setPostCode(int postCode) {this.postCode = postCode;}
     public void setStreet(String street) {this.street = street;}
+    public void setTraderValidation(Boolean traderValidation) {this.traderValidation = traderValidation;}
 }

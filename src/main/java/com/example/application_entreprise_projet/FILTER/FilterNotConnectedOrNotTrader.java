@@ -36,7 +36,15 @@ public class FilterNotConnectedOrNotTrader implements Filter {
             }
             else
             {
-                chain.doFilter(request, response);
+                if(user.getTraderValidation() == false)
+                {
+                    ((HttpServletResponse) response).sendRedirect("TraderNotValidate.jsp");
+                }
+                else
+                {
+                    chain.doFilter(request, response);
+                }
+
             }
 
         }
