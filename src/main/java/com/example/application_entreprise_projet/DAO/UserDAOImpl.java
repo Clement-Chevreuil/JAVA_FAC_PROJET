@@ -129,13 +129,13 @@ public class UserDAOImpl implements IUserDAO {
 
     public List<User> getAllTraders() throws SQLException {
         List<User> listUser = new ArrayList<>();
-        String sql = "SELECT * FROM user";
+        String sql = "SELECT * FROM user WHERE trader = 1";
 
         connect();
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
         //statement.setString(1, u.getEmail());
 
-        ResultSet result = statement.executeQuery(sql);
+        ResultSet result = statement.executeQuery();
 
         while (result.next()) {
 
@@ -166,7 +166,7 @@ public class UserDAOImpl implements IUserDAO {
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
         //statement.setString(1, u.getEmail());
 
-        ResultSet result = statement.executeQuery(sql);
+        ResultSet result = statement.executeQuery();
 
         while (result.next()) {
 
@@ -197,22 +197,26 @@ public class UserDAOImpl implements IUserDAO {
 
     public void updateUser(User u) throws SQLException {
         RepoUsers.put(u.getId(),u);
-        String sql = "UPDATE User SET email = ?, password = ?, admin = false, trader = ?, country = ?, city = ?, postCode = ?, city = ?, traderValidation = ?";
-        sql += " WHERE user = ?";
-        connect();
 
+        System.out.println(u.getCity());
+
+
+
+        String sql = "UPDATE User SET email = ?, password = ?,  country = ?, city = ?, postCode = ?, city = ?";
+        sql += " WHERE id = ?";
+
+        connect();
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+
         statement.setString(1, u.getEmail());
         statement.setString(2, u.getPassword());
-        statement.setBoolean(3, u.getTrader());
-        statement.setString(4, u.getCountry());
-        statement.setString(5, u.getCity());
-        statement.setInt(6, u.getPostCode());
-        statement.setString(7, u.getCity());
-        statement.setBoolean(8, u.getTraderValidation());
-        statement.setInt(9, u.getId());
+        statement.setString(3, u.getCountry());
+        statement.setString(4, u.getCity());
+        statement.setInt(5, u.getPostCode());
+        statement.setString(6, u.getCity());
+        statement.setInt(7, u.getId());
 
-        boolean rowUpdated = statement.executeUpdate() > 0;
+        statement.executeUpdate();
         statement.close();
         disconnect();
 

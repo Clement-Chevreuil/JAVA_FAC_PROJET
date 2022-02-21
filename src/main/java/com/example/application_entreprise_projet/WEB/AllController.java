@@ -1,6 +1,8 @@
 package com.example.application_entreprise_projet.WEB;
 
+import com.example.application_entreprise_projet.CLASS.Produce;
 import com.example.application_entreprise_projet.CLASS.User;
+import com.example.application_entreprise_projet.METIER.IProduceMetier;
 import com.example.application_entreprise_projet.METIER.IUserMetier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -21,11 +23,14 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@Controller
-public class UserController extends HttpServlet {
+@org.springframework.stereotype.Controller
+public class AllController extends HttpServlet {
 
     @Autowired
     private IUserMetier user;
+
+    @Autowired
+    private IProduceMetier produce;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -60,9 +65,7 @@ public class UserController extends HttpServlet {
 
         if(userValidation != null)
         {
-            System.out.println(userValidation.getEmail());
             session.setAttribute("user", userValidation);
-
             if(userValidation.getAdmin() == true)
             {
                 model.addAttribute("traders",user.findAllTraders());
@@ -78,11 +81,17 @@ public class UserController extends HttpServlet {
                 }
                 else
                 {
+                    model.addAttribute("produces",produce.findAllByUserID(userValidation));
+                    model.addAttribute("produce", new Produce());
                     return "trader";
                 }
 
             }
-            else {return "consumer";}
+            else
+            {
+                model.addAttribute("produces",produce.findAll());
+                return "consumer";
+            }
         }
         else {return "erreur";}
 
@@ -110,35 +119,76 @@ public class UserController extends HttpServlet {
     @RequestMapping("/AdminIndex")
     public String AdminIndex(Model model) throws SQLException {
         model.addAttribute("user", new User());
-        model.addAttribute("users",user.findAll());
+        model.addAttribute("traders",user.findAllTraders());
+        model.addAttribute("consumers",user.findAllConsumers());
         return "admin";
     }
 
     @RequestMapping("/TraderIndex")
-    public String TraderIndex(Model model) throws SQLException {
+    public String TraderIndex(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
         model.addAttribute("user", new User());
+        model.addAttribute("produces",produce.findAllByUserID(u));
+        model.addAttribute("produce", new Produce());
         return "trader";
     }
 
     @RequestMapping("/ConsumerIndex")
     public String ConsumerIndex(Model model) throws SQLException {
         model.addAttribute("user", new User());
+        model.addAttribute("produces",produce.findAll());
         return "consumer";
     }
 
     @RequestMapping("/editUser")
-    public String edit(@RequestParam int id , Model model) throws SQLException {
+    public String edit(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
 
-        model.addAttribute("user", user.find(id));
-        return "admin";
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        model.addAttribute("user", user);
+        return "updateProfil";
     }
+
+    @RequestMapping("/updateUser")
+    public String updateUser(User u, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User userToGetID = (User) session.getAttribute("user");
+        u.setId(userToGetID.getId());
+        user.update(u);
+        return "index";
+    }
+
     @RequestMapping("/deleteUser")
     public String delete( @RequestParam int id , Model model) throws SQLException {
         user.delete(user.find(id));
         model.addAttribute("user", new User());
-        model.addAttribute("users",user.findAll());
+        model.addAttribute("traders",user.findAllTraders());
+        model.addAttribute("consumers",user.findAllConsumers());
         return "admin";
     }
+
+
+    //Produce
+
+
+    @RequestMapping("/saveProduce")
+    public String saveProduce(Produce p, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User userSession = (User) session.getAttribute("user");
+        p.setUser(userSession);
+
+        produce.add(p);
+        return "trader";
+    }
+
+
+
+
 
 
 }
