@@ -1,16 +1,13 @@
-package com.example.application_entreprise_projet.METIER;
+package com.example.application_entreprise_projet.METIER.PRODUCE;
 
 import com.example.application_entreprise_projet.CLASS.Produce;
 import com.example.application_entreprise_projet.CLASS.User;
-import com.example.application_entreprise_projet.DAO.IProduceDAO;
-import com.example.application_entreprise_projet.DAO.IUserDAO;
-import com.example.application_entreprise_projet.DAO.ProduceDAOImpl;
-import com.example.application_entreprise_projet.DAO.UserDAOImpl;
+import com.example.application_entreprise_projet.DAO.PRODUCE.IProduceDAO;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class ProduceMetierImpl implements IProduceMetier{
+public class ProduceMetierImpl implements IProduceMetier {
 
     private IProduceDAO dao;
 
@@ -22,9 +19,10 @@ public class ProduceMetierImpl implements IProduceMetier{
         dao.addProduce(p);
     }
 
+
     @Override
-    public Produce find(Produce p) throws SQLException {
-        Produce produce = dao.findProduce(p);
+    public Produce find(int id) throws SQLException {
+        Produce produce = dao.findProduce(id);
         return produce;
     }
 
@@ -34,13 +32,18 @@ public class ProduceMetierImpl implements IProduceMetier{
     }
 
     @Override
-    public void delete(Produce p) throws SQLException {
-        dao.deleteProduce(p);
+    public void delete(int id) throws SQLException {
+        dao.deleteProduce(id);
     }
 
     @Override
     public List<Produce> findAll() throws SQLException {
         return dao.findAllProduce();
+    }
+
+    @Override
+    public List<Produce> findAllNotReserve(User u) throws SQLException {
+        return dao.findAllProduceNotReserve(u);
     }
 
     @Override

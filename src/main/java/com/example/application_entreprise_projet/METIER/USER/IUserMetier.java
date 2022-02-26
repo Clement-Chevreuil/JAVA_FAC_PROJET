@@ -1,4 +1,4 @@
-package com.example.application_entreprise_projet.METIER;
+package com.example.application_entreprise_projet.METIER.USER;
 
 import com.example.application_entreprise_projet.CLASS.User;
 
@@ -15,10 +15,12 @@ public interface IUserMetier {
     public List<User> findAllTraders () throws SQLException;
     public void update(User u) throws SQLException;
     public void validationTrader(int i) throws SQLException;
-
+    public void delete(int id) throws SQLException;
+    public Integer StatisticYear(String option1) throws SQLException;
+    public Integer StatisticMonth(int option1, String option2) throws SQLException;
     //NO BDD
     public User find(int id);
 
-    public void delete(User u);
+
 
 }

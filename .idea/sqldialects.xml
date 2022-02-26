@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/src/main/java/com/example/application_entreprise_projet/DAO/UserDAOImpl.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/application_entreprise_projet/DAO/USER/UserDAOImpl.java" dialect="GenericSQL" />
   </component>
 </project>

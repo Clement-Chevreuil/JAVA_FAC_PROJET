@@ -16,6 +16,10 @@
     <H1>Consumer</H1>
     <a type="button" href="editUser">UPDATE PROFIL</a>
     <br>
+    <a type="button" href="ShoppingBagWaiting">Bag List Loading</a>
+    <br>
+    <a type="button" href="consumerCommandList">Bag List Buy</a>
+    <br>
     <a href="index.jsp">Accueil</a>
     <br>
     <h2>LIST PRODUCE</h2>
@@ -23,7 +27,7 @@
     <table>
         <tr>
             <th>ID</th>
-            <th>NAME</th>
+            <th>EMAIL</th>
             <th>CATEGORY</th>
             <th>PRICE</th>
             <th>EXPIRATION DATE</th>
@@ -37,7 +41,7 @@
                 <td>${t.price}</td>
                 <td>${t.expirationDate}</td>
                 <td>
-                    <a href="">Reservation</a>
+                    <a href="addShoppingBag?id=${t.id}">Reservation</a>
                 </td>
             </tr>
         </c:forEach>

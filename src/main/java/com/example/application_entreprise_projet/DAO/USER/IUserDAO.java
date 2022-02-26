@@ -1,4 +1,4 @@
-package com.example.application_entreprise_projet.DAO;
+package com.example.application_entreprise_projet.DAO.USER;
 
 import com.example.application_entreprise_projet.CLASS.User;
 
@@ -14,6 +14,8 @@ public interface IUserDAO {
     public List<User> getAllConsumers() throws SQLException;
     public User getUser(int id);
     public void updateUser (User u) throws SQLException;
-    public void deleteUser (User u);
+    public void deleteUser (int id) throws SQLException;
     public void validateTrader(int i) throws SQLException;
+    Integer StaticYear(String option1)throws SQLException;
+    Integer StaticMonth(int option1, String option2)throws SQLException;
 }

@@ -1,8 +1,7 @@
-package com.example.application_entreprise_projet.DAO;
+package com.example.application_entreprise_projet.DAO.USER;
 
 import com.example.application_entreprise_projet.CLASS.User;
 
-import javax.servlet.http.HttpSession;
 import java.sql.*;
 import java.util.*;
 
@@ -44,17 +43,18 @@ public class UserDAOImpl implements IUserDAO {
 
     public void addUser(User u) throws SQLException {
         RepoUsers.put(u.getId(), u);
-        String sql = "INSERT INTO User (id, email , password, country, city, postCode, street, admin, trader, traderValidation) VALUES (?, ?, ?,?,?,?,?,false,?,false)";
+        String sql = "INSERT INTO User (email, firstName, lastName , password, country, city, postCode, street, admin, trader, traderValidation, dateAdhesion) VALUES (?,?, ?, ?,?,?,?,?,false,?,false,NOW())";
         connect();
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setInt(1, u.getId());
-        statement.setString(2, u.getEmail());
-        statement.setString(3, u.getPassword());
-        statement.setString(4, u.getCountry());
-        statement.setString(5, u.getCity());
-        statement.setInt(6, u.getPostCode());
-        statement.setString(7, u.getStreet());
-        statement.setBoolean(8, u.getTrader());
+        statement.setString(1, u.getEmail());
+        statement.setString(2, u.getFirstName());
+        statement.setString(3, u.getLastName());
+        statement.setString(4, u.getPassword());
+        statement.setString(5, u.getCountry());
+        statement.setString(6, u.getCity());
+        statement.setInt(7, u.getPostCode());
+        statement.setString(8, u.getStreet());
+        statement.setBoolean(9, u.getTrader());
 
         statement.executeUpdate();
         statement.close();
@@ -196,25 +196,22 @@ public class UserDAOImpl implements IUserDAO {
     }
 
     public void updateUser(User u) throws SQLException {
-        RepoUsers.put(u.getId(),u);
 
-        System.out.println(u.getCity());
-
-
-
-        String sql = "UPDATE User SET email = ?, password = ?,  country = ?, city = ?, postCode = ?, city = ?";
+        String sql = "UPDATE User SET email = ?, firstName = ?, LastName = ?, password = ?,  country = ?, city = ?, postCode = ?, city = ?";
         sql += " WHERE id = ?";
 
         connect();
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
 
         statement.setString(1, u.getEmail());
-        statement.setString(2, u.getPassword());
-        statement.setString(3, u.getCountry());
-        statement.setString(4, u.getCity());
-        statement.setInt(5, u.getPostCode());
+        statement.setString(2, u.getFirstName());
+        statement.setString(3, u.getLastName());
+        statement.setString(4, u.getPassword());
+        statement.setString(5, u.getCountry());
         statement.setString(6, u.getCity());
-        statement.setInt(7, u.getId());
+        statement.setInt(7, u.getPostCode());
+        statement.setString(8, u.getCity());
+        statement.setInt(9, u.getId());
 
         statement.executeUpdate();
         statement.close();
@@ -237,8 +234,68 @@ public class UserDAOImpl implements IUserDAO {
     }
 
     @Override
-    public void deleteUser(User u) {
-        RepoUsers.remove(u.getId());
+    public Integer StaticYear(String option1) throws SQLException {
+        Integer statistic = 0;
+
+        String sql;
+
+            sql = "SELECT COUNT(id) as stat FROM user WHERE YEAR(dateAdhesion) = ?;";
+            connect();
+            PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+            statement.setString(1, option1);
+            ResultSet result = statement.executeQuery();
+            while (result.next())
+            {
+                int max = result.getInt("stat");
+                statistic = max;
+            }
+            statement.close();
+            disconnect();
+
+        return statistic;
+    }
+
+    @Override
+    public Integer StaticMonth(int option1, String option2) throws SQLException {
+        Integer statistic = 0;
+
+        String sql;
+        System.out.println(option1);
+        System.out.println(option2);
+        sql = "SELECT COUNT(id) as stat FROM user WHERE MONTH (dateAdhesion) = ? AND YEAR(dateAdhesion) = ? ;";
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, option1);
+        statement.setString(2, option2);
+        ResultSet result = statement.executeQuery();
+        while (result.next())
+        {
+            int max = result.getInt("stat");
+            statistic = max;
+        }
+        statement.close();
+        disconnect();
+
+        return statistic;
+    }
+
+
+
+
+
+
+    @Override
+    public void deleteUser(int id) throws SQLException {
+        String sql = "DELETE FROM user where id = ?";
+
+        connect();
+
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, id);
+
+        boolean rowDeleted = statement.executeUpdate() > 0;
+        statement.close();
+        disconnect();
     }
 
     public void init() throws SQLException {

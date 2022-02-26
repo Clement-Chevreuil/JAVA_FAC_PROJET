@@ -6,16 +6,23 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
-	<bean id="d" class="com.example.application_entreprise_projet.DAO.UserDAOImpl" init-method="init">
+	<bean id="d" class="com.example.application_entreprise_projet.DAO.USER.UserDAOImpl" init-method="init">
 	</bean>
 
-	<bean id="e" class="com.example.application_entreprise_projet.DAO.ProduceDAOImpl" init-method="init">
+	<bean id="e" class="com.example.application_entreprise_projet.DAO.PRODUCE.ProduceDAOImpl" init-method="init">
 	</bean>
 
-	<bean id="m" class="com.example.application_entreprise_projet.METIER.UserMetierImpl" >
+	<bean id="f" class="com.example.application_entreprise_projet.DAO.SHOPPINGBAG.ShoppingBagDAOImpl" init-method="init">
+	</bean>
+
+
+	<bean id="m" class="com.example.application_entreprise_projet.METIER.USER.UserMetierImpl" >
 		<property name="dao" ref="d"/>
 	</bean>
-	<bean id="p" class="com.example.application_entreprise_projet.METIER.ProduceMetierImpl" >
+	<bean id="p" class="com.example.application_entreprise_projet.METIER.PRODUCE.ProduceMetierImpl" >
 		<property name="dao" ref="e"/>
+	</bean>
+	<bean id="n" class="com.example.application_entreprise_projet.METIER.SHOPPINGBAG.ShoppingBagImpl" >
+		<property name="dao" ref="f"/>
 	</bean>
 </beans>

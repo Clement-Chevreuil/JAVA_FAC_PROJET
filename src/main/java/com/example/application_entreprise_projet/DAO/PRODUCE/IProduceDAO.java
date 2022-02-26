@@ -1,4 +1,4 @@
-package com.example.application_entreprise_projet.DAO;
+package com.example.application_entreprise_projet.DAO.PRODUCE;
 
 import com.example.application_entreprise_projet.CLASS.Produce;
 import com.example.application_entreprise_projet.CLASS.User;
@@ -10,9 +10,10 @@ public interface IProduceDAO {
 
     //WITH BDD
     public void addProduce(Produce p) throws SQLException;
-    public Produce findProduce(Produce p) throws SQLException;
+    public Produce findProduce(int id) throws SQLException;
     public void updateProduce(Produce p) throws SQLException;
-    public void deleteProduce(Produce p) throws SQLException;
+    public void deleteProduce(int id) throws SQLException;
     public List<Produce> findAllProduce() throws SQLException;
     public List<Produce> findAllProduceByUserID(User u) throws SQLException;
+    List<Produce> findAllProduceNotReserve(User u) throws SQLException;
 }

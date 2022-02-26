@@ -22,8 +22,11 @@
     <h2>ADD PRODUCE</h2>
 
     <%--@elvariable id="produce" type="com.example.application_entreprise_projet.CLASS.Produce"--%>
-    <f:form modelAttribute="produce" method="post" action="saveProduce">
+    <f:form modelAttribute="produce" method="post" action="updateProduce">
         <table>
+            <tr>
+                <td><f:input type="hidden" path="id"/></td>
+            </tr>
             <tr>
                 <td>Name :</td>
                 <td><f:input path="name"/></td>
@@ -44,7 +47,7 @@
                 <td><f:input type="date" path="expirationDate"/></td>
             </tr>
             <tr>
-                <td><input type="submit" value="Save"/></td>
+                <td><input type="submit" value="UPDATE"/></td>
             </tr>
         </table>
     </f:form>
@@ -77,38 +80,6 @@
         </c:forEach>
     </table>
 
-    <h2>LIST Commande Valide</h2>
-
-    <table>
-        <tr>
-            <th>COMMANDE NUMBER</th>
-            <th>DATE COMMANDE</th>
-            <th>FIRST NAME</th>
-            <th>LAST NAME</th>
-            <th>EMAIL</th>
-            <th>COUNTRY</th>
-            <th>CITY</th>
-            <th>POST CODE</th>
-            <th>STREET</th>
-            <th>ACTIONS</th>
-        </tr>
-        <c:forEach items="${commande}" var="t">
-            <tr>
-                <td>${t.noCommande}</td>
-                <td>${t.dateCommandeValidate}</td>
-                <td>${t.user.firstName}</td>
-                <td>${t.user.lastName}</td>
-                <td>${t.user.email}</td>
-                <td>${t.user.country}</td>
-                <td>${t.user.city}</td>
-                <td>${t.user.postCode}</td>
-                <td>${t.user.street}</td>
-                <td>
-                    <a href="traderCommandDetail?noCommande=${t.noCommande}">SEE</a>
-                </td>
-            </tr>
-        </c:forEach>
-    </table>
 
 </body>
 </html>

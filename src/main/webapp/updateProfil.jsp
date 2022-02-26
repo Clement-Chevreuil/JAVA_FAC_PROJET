@@ -20,10 +20,17 @@
         <tr>
             <td>Email:</td>
             <td><f:input path="email"/></td>
-
         </tr>
         <tr>
-            <td>Passwors:</td>
+            <td>First Name:</td>
+            <td><f:input path="firstName"/></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><f:input path="lastName"/></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
             <td><f:input path="password"/></td>
 
         </tr>

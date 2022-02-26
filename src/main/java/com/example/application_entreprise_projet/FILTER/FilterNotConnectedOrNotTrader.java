@@ -38,7 +38,7 @@ public class FilterNotConnectedOrNotTrader implements Filter {
             {
                 if(user.getTraderValidation() == false)
                 {
-                    ((HttpServletResponse) response).sendRedirect("TraderNotValidate.jsp");
+                    ((HttpServletResponse) response).sendRedirect("traderNotValidate.jsp");
                 }
                 else
                 {

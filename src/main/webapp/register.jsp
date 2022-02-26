@@ -18,14 +18,16 @@
 <f:form modelAttribute="user" method="post" action="saveUser">
     <table>
         <tr>
-            <td>ID</td>
-            <td><f:input path="id"/></td>
-
-        </tr>
-        <tr>
             <td>Email:</td>
             <td><f:input path="email"/></td>
-
+        </tr>
+        <tr>
+            <td>First Name:</td>
+            <td><f:input path="firstName"/></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><f:input path="lastName"/></td>
         </tr>
         <tr>
             <td>Passwors:</td>

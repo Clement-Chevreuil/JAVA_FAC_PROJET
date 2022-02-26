@@ -1,7 +1,7 @@
-package com.example.application_entreprise_projet.METIER;
+package com.example.application_entreprise_projet.METIER.USER;
 
 import com.example.application_entreprise_projet.CLASS.User;
-import com.example.application_entreprise_projet.DAO.IUserDAO;
+import com.example.application_entreprise_projet.DAO.USER.IUserDAO;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -54,9 +54,18 @@ public class UserMetierImpl implements IUserMetier {
         dao.validateTrader(i);
     }
 
-    public void delete(User u) {
-        dao.deleteUser(u);
+    public void delete(int id) throws SQLException {
+        dao.deleteUser(id);
 
+    }
+
+    @Override
+    public Integer StatisticYear(String option1) throws SQLException {
+        return dao.StaticYear(option1);
+    }
+    @Override
+    public Integer StatisticMonth(int option1, String option2) throws SQLException {
+        return dao.StaticMonth(option1, option2);
     }
 
 }
