@@ -11,10 +11,7 @@
 <br/>
     <a href="login">Login</a>
     <a href="register">Register</a>
-    <a href="AdminIndex">Admin</a>
-    <a href="ConsumerIndex">Consumer</a>
-    <a href="TraderIndex">Trader</a>
-    <a href="Deconnexion">Deconnexion</a>
+
 
     <%
         HttpSession session1 = request.getSession(true);

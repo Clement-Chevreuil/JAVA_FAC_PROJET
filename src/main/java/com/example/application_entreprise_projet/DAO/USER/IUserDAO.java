@@ -7,15 +7,18 @@ import java.util.List;
 
 public interface IUserDAO {
 
-    public void addUser (User u) throws SQLException;
-    public User connexionUser (User u) throws SQLException;
-    public List<User> getAllUsers() throws SQLException;
-    public List<User> getAllTraders() throws SQLException;
-    public List<User> getAllConsumers() throws SQLException;
-    public User getUser(int id);
-    public void updateUser (User u) throws SQLException;
-    public void deleteUser (int id) throws SQLException;
+    public void add (User u) throws SQLException;
+    public void update (User u) throws SQLException;
+    public void delete (int id) throws SQLException;
     public void validateTrader(int i) throws SQLException;
+
+    public List<User> findAll() throws SQLException;
+    public List<User> findAllConsumers() throws SQLException;
+    public List<User> findAllTraders() throws SQLException;
+
+    public User connexion (User u) throws SQLException;
+    public User find(int id);
+
     Integer StaticYear(String option1)throws SQLException;
     Integer StaticMonth(int option1, String option2)throws SQLException;
 }

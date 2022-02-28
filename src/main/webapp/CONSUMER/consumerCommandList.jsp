@@ -13,6 +13,8 @@
     <title>Title</title>
 </head>
 <body>
+<a href="Deconnexion">Deconnexion</a>
+<a href="ConsumerIndex">Accueil</a>
 <table>
     <h1>COMMAND RECAP</h1>
 

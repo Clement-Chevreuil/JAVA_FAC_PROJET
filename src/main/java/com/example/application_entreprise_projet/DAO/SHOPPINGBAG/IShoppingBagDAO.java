@@ -8,16 +8,18 @@ import java.util.List;
 
 public interface IShoppingBagDAO {
 
-    public void addShoppingBag (ShoppingBag shoppingBag) throws SQLException;
-    public void updateShoppingBag (ShoppingBag shoppingBag) throws SQLException;
-    public void deleteShoppingBag (ShoppingBag shoppingBag) throws SQLException;
-    public List<ShoppingBag> getAllShoppingBagConsumer(User u) throws SQLException;
-    public List<ShoppingBag> getAllShoppingBag() throws SQLException;
-    public List<ShoppingBag> getAllShoppingBagValidateConsumer(User u) throws SQLException;
-    public void commandValidation(ShoppingBag s) throws  SQLException;
-    public List<ShoppingBag> findAllCommandToTrader(User u) throws SQLException;
+    public void add (ShoppingBag shoppingBag) throws SQLException;
+    public void update (ShoppingBag shoppingBag) throws SQLException;
+    public void delete (ShoppingBag shoppingBag) throws SQLException;
+    public void bagValidation(ShoppingBag s) throws  SQLException;
 
-    List<ShoppingBag> findAllCommandToConsumer(User u) throws SQLException;
+    public List<ShoppingBag> findAll() throws SQLException;
+    public List<ShoppingBag> findByConsumer(User u) throws SQLException;
+    public List<ShoppingBag> findValidate(User u) throws SQLException;
+    public List<ShoppingBag> findCommandToTrader(User u) throws SQLException;
+    public List<ShoppingBag> findCommandToConsumer(User u) throws SQLException;
+    public List<ShoppingBag> findCommandDetails(int noCommande) throws SQLException;
 
-    public List<ShoppingBag> getDetailsCommande(int noCommande) throws SQLException;
+    public int StatisticYear(String option) throws SQLException;
+    public int StatisticMonth(int i, String option) throws SQLException;
 }

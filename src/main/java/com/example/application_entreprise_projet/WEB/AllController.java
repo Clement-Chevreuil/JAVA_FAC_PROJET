@@ -27,38 +27,32 @@ public class AllController extends HttpServlet {
 
     @Autowired
     private IUserMetier user;
-
     @Autowired
     private IProduceMetier produce;
-
     @Autowired
     private IShoppingBagMetier shoppingBag;
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
 
-    }
+
+    //INDEX
 
     @RequestMapping("/register")
-    public String register(Model model)
-    {
+    public String register(Model model) {
         model.addAttribute("user", new User());
-        return "register";
+        return "INDEX/register";
     }
-
     @RequestMapping("/saveUser")
     public String saveUser(User u,Model model) throws SQLException {
         user.add(u);
         return "index";
     }
-
     @RequestMapping("/login")
-    public String login(Model model)
-    {
+    public String login(Model model) {
         model.addAttribute("user", new User());
-        return "login";
+        return "INDEX/login";
     }
-
     @RequestMapping("/connexion")
     public String connexion(User u, HttpServletRequest request, HttpServletResponse response, Model model) throws SQLException, IOException {
         User userValidation = user.connexion(u);
@@ -72,34 +66,33 @@ public class AllController extends HttpServlet {
             {
                 model.addAttribute("traders",user.findAllTraders());
                 model.addAttribute("consumers",user.findAllConsumers());
-                return "admin";
+                return "ADMIN/admin";
             }
 
             else if(userValidation.getTrader() == true)
             {
                 if(userValidation.getTraderValidation() == false)
                 {
-                    return "traderNotValidate";
+                    return "TRADER/traderNotValidate";
                 }
                 else
                 {
-                    model.addAttribute("produces",produce.findAllByUserID(userValidation));
+                    model.addAttribute("produces",produce.findByUserID(userValidation));
                     model.addAttribute("produce", new Produce());
-                    model.addAttribute("commande",shoppingBag.findAllCommande(userValidation));
-                    return "trader";
+                    model.addAttribute("commande",shoppingBag.findCommandToTrader(userValidation));
+                    return "TRADER/trader";
                 }
 
             }
             else
             {
-                model.addAttribute("produces",produce.findAllNotReserve(userValidation));
-                return "consumer";
+                model.addAttribute("produces",produce.findNotReserve(userValidation));
+                return "CONSUMER/consumer";
             }
         }
-        else {return "erreur";}
+        else {return "INDEX/erreur";}
 
     }
-
     @RequestMapping("/Deconnexion")
     public void deconnexion(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -109,242 +102,32 @@ public class AllController extends HttpServlet {
 
     }
 
-    @RequestMapping("/ValidationTrader")
-    public String ValidationTrader(int id,Model model, HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
-
-        user.validationTrader(id);
-        model.addAttribute("traders",user.findAllTraders());
-        model.addAttribute("consumers",user.findAllConsumers());
-        return "admin";
-
-    }
+    //ADMIN
 
     @RequestMapping("/AdminIndex")
     public String AdminIndex(Model model) throws SQLException {
         model.addAttribute("user", new User());
         model.addAttribute("traders",user.findAllTraders());
         model.addAttribute("consumers",user.findAllConsumers());
-        return "admin";
+        return "ADMIN/admin";
     }
+    @RequestMapping("/ValidationTrader")
+    public String ValidationTrader(int id,Model model, HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
 
-    @RequestMapping("/TraderIndex")
-    public String TraderIndex(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        user.validationTrader(id);
+        model.addAttribute("traders",user.findAllTraders());
+        model.addAttribute("consumers",user.findAllConsumers());
+        return "ADMIN/admin";
 
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-        model.addAttribute("user", new User());
-        model.addAttribute("produces",produce.findAllByUserID(u));
-        model.addAttribute("produce", new Produce());
-        model.addAttribute("commande",shoppingBag.findAllCommande(u));
-        return "trader";
     }
-
-    @RequestMapping("/ConsumerIndex")
-    public String ConsumerIndex(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-        model.addAttribute("produces",produce.findAllNotReserve(u));
-        return "consumer";
-    }
-
-    @RequestMapping("/editUser")
-    public String edit(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-
-        model.addAttribute("user", user);
-        return "updateProfil";
-    }
-
-    @RequestMapping("/updateUser")
-    public String updateUser(User u, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        HttpSession session = request.getSession();
-        User userToGetID = (User) session.getAttribute("user");
-        u.setId(userToGetID.getId());
-        u.setTrader(userToGetID.getTrader());
-        u.setAdmin(userToGetID.getAdmin());
-        u.setTraderValidation(userToGetID.getTraderValidation());
-        user.update(u);
-        session.setAttribute("user", u);
-        return "index";
-    }
-
     @RequestMapping("/deleteUser")
     public String delete( @RequestParam int id , Model model) throws SQLException {
         user.delete(id);
         model.addAttribute("user", new User());
         model.addAttribute("traders",user.findAllTraders());
         model.addAttribute("consumers",user.findAllConsumers());
-        return "admin";
+        return "ADMIN/admin";
     }
-
-
-
-    //Produce
-
-
-    @RequestMapping("/saveProduce")
-    public String saveProduce(Produce p, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        HttpSession session = request.getSession();
-        User userSession = (User) session.getAttribute("user");
-        p.setUser(userSession);
-        produce.add(p);
-        model.addAttribute("produce", new Produce());
-        model.addAttribute("produces",produce.findAllByUserID(userSession));
-        model.addAttribute("commande",shoppingBag.findAllCommande(userSession));
-
-        return "trader";
-    }
-
-    @RequestMapping("/deleteProduce")
-    public String deleteProduce( @RequestParam int id , Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-        produce.delete(id);
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-        model.addAttribute("user", new User());
-        model.addAttribute("produces",produce.findAllByUserID(u));
-        model.addAttribute("commande",shoppingBag.findAllCommande(u));
-        model.addAttribute("produce", new Produce());
-        return "trader";
-    }
-
-    @RequestMapping("/editProduce")
-    public String editProduce( @RequestParam int id , Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-        Produce findProd = produce.find(id);
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-        model.addAttribute("produces",produce.findAllByUserID(u));
-        model.addAttribute("produce", findProd);
-        return "traderEdit";
-    }
-
-    @RequestMapping("/updateProduce")
-    public String updateProduce(Produce p , Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-        produce.update(p);
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-        model.addAttribute("produces",produce.findAllByUserID(u));
-        model.addAttribute("commande",shoppingBag.findAllCommande(u));
-        model.addAttribute("produce", new Produce());
-        return "trader";
-    }
-
-    //Shopping Bag
-
-    @RequestMapping("/addShoppingBag")
-    public String addShoppingBag(int id, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        HttpSession session = request.getSession();
-        User userSession = (User) session.getAttribute("user");
-        Produce produce1 = produce.find(id);
-        ShoppingBag bag = new ShoppingBag(userSession, produce1);
-        shoppingBag.addBag(bag);
-
-        model.addAttribute("produces",produce.findAllNotReserve(userSession));
-
-        return "consumer";
-    }
-
-
-    @RequestMapping("/shoppingBagIndex")
-    public String shoppingBagIndex(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-        model.addAttribute("user", new User());
-        model.addAttribute("produces",produce.findAllByUserID(u));
-        model.addAttribute("commande",shoppingBag.findAllCommande(u));
-        model.addAttribute("produce", new Produce());
-
-        return "trader";
-    }
-
-    @RequestMapping("/ShoppingBagWaiting")
-    public String ShoppingBagWaiting(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-        List<ShoppingBag> shopList = shoppingBag.getAllBagConsumer(u);
-        model.addAttribute("produces", shopList );
-
-
-        return "consumerCommandWaitingValidation";
-    }
-
-    @RequestMapping("/ShoppingBagValidate")
-    public String ShoppingBagValidate(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-        List<ShoppingBag> shopList = shoppingBag.getAllBagValidateConsumer(u);
-        model.addAttribute("shoppingBag", shopList );
-
-
-        return "shoppingBagValidate";
-    }
-
-    @RequestMapping("/ShoppingBagValidation")
-    public String ShoppingBagValidation(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        String dateClick = request.getParameter("dateClick");
-
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-
-        ShoppingBag shop = new ShoppingBag();
-        shop.setUser(u);
-        shop.setDateClickAndCollect(dateClick);
-
-        shoppingBag.bagValidation(shop);
-        List<ShoppingBag> shopList = shoppingBag.getAllBagConsumer(u);
-        model.addAttribute("produces", shopList );
-
-
-        return "consumerCommandWaitingValidation";
-    }
-
-    @RequestMapping("/traderCommandDetail")
-    public String traderCommandDetail(@RequestParam int noCommande, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-
-        List<ShoppingBag> commandDetails = shoppingBag.getDetailsCommande(noCommande);
-        model.addAttribute("commandDetails", commandDetails);
-
-        return "traderCommandDetails";
-    }
-
-    @RequestMapping("/consumerCommandList")
-    public String consumerCommandList(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-
-        List<ShoppingBag> commandDetails = shoppingBag.findAllCommandToConsumer(u);
-        model.addAttribute("commandDetails", commandDetails);
-
-        return "consumerCommandList";
-    }
-
-    @RequestMapping("/consumerCommand")
-    public String consumerCommand(@RequestParam int noCommande, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
-
-        List<ShoppingBag> commandDetails = shoppingBag.getDetailsCommande(noCommande);
-        model.addAttribute("commandDetails", commandDetails);
-
-
-
-        return "consumerCommand";
-    }
-
     @RequestMapping("/adminStatistic")
     public String adminStatistic(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
 
@@ -401,16 +184,201 @@ public class AllController extends HttpServlet {
 
 
 
-        return "adminStatistic";
+        return "ADMIN/adminStatistic";
     }
 
+    //TRADER
+
+    @RequestMapping("/TraderIndex")
+    public String TraderIndex(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+        model.addAttribute("user", new User());
+        model.addAttribute("produces",produce.findByUserID(u));
+        model.addAttribute("produce", new Produce());
+        model.addAttribute("commande",shoppingBag.findCommandToTrader(u));
+        return "TRADER/trader";
+    }
+    @RequestMapping("/saveProduce")
+    public String saveProduce(Produce p, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User userSession = (User) session.getAttribute("user");
+        p.setUser(userSession);
+        produce.add(p);
+        model.addAttribute("produce", new Produce());
+        model.addAttribute("produces",produce.findByUserID(userSession));
+        model.addAttribute("commande",shoppingBag.findCommandToTrader(userSession));
+
+        return "TRADER/trader";
+    }
+    @RequestMapping("/deleteProduce")
+    public String deleteProduce( @RequestParam int id , Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        produce.delete(id);
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+        model.addAttribute("user", new User());
+        model.addAttribute("produces",produce.findByUserID(u));
+        model.addAttribute("commande",shoppingBag.findCommandToTrader(u));
+        model.addAttribute("produce", new Produce());
+        return "TRADER/trader";
+    }
+    @RequestMapping("/editProduce")
+    public String editProduce( @RequestParam int id , Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        Produce findProd = produce.find(id);
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+        model.addAttribute("produces",produce.findByUserID(u));
+        model.addAttribute("produce", findProd);
+        return "TRADER/traderEdit";
+    }
+    @RequestMapping("/updateProduce")
+    public String updateProduce(Produce p , Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        produce.update(p);
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+        model.addAttribute("produces",produce.findByUserID(u));
+        model.addAttribute("commande",shoppingBag.findCommandToTrader(u));
+        model.addAttribute("produce", new Produce());
+        return "TRADER/trader";
+    }
+    @RequestMapping("/shoppingBagIndex")
+    public String shoppingBagIndex(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+        model.addAttribute("user", new User());
+        model.addAttribute("produces",produce.findByUserID(u));
+        model.addAttribute("commande",shoppingBag.findCommandToTrader(u));
+        model.addAttribute("produce", new Produce());
+
+        return "TRADER/trader";
+    }
+    @RequestMapping("/traderCommandDetail")
+    public String traderCommandDetail(@RequestParam int noCommande, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+
+        List<ShoppingBag> commandDetails = shoppingBag.findCommandDetails(noCommande);
+        model.addAttribute("commandDetails", commandDetails);
+
+        return "TRADER/traderCommandDetails";
+    }
+
+    //CONSUMER
+
+    @RequestMapping("/ConsumerIndex")
+    public String ConsumerIndex(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+        model.addAttribute("produces",produce.findNotReserve(u));
+        return "CONSUMER/consumer";
+    }
+    @RequestMapping("/addShoppingBag")
+    public String addShoppingBag(int id, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User userSession = (User) session.getAttribute("user");
+        Produce produce1 = produce.find(id);
+        ShoppingBag bag = new ShoppingBag(userSession, produce1);
+        shoppingBag.add(bag);
+
+        model.addAttribute("produces",produce.findNotReserve(userSession));
+
+        return "CONSUMER/consumer";
+    }
+    @RequestMapping("/ShoppingBagWaiting")
+    public String ShoppingBagWaiting(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+        List<ShoppingBag> shopList = shoppingBag.findByConsumer(u);
+        model.addAttribute("produces", shopList );
+
+
+        return "CONSUMER/consumerCommandWaitingValidation";
+    }
+    @RequestMapping("/ShoppingBagValidate")
+    public String ShoppingBagValidate(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+        List<ShoppingBag> shopList = shoppingBag.findValidate(u);
+        model.addAttribute("shoppingBag", shopList );
+
+
+        return "shoppingBagValidate";
+    }
+    @RequestMapping("/ShoppingBagValidation")
+    public String ShoppingBagValidation(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        String dateClick = request.getParameter("dateClick");
+
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+
+        ShoppingBag shop = new ShoppingBag();
+        shop.setUser(u);
+        shop.setDateClickAndCollect(dateClick);
+
+        shoppingBag.bagValidation(shop);
+        List<ShoppingBag> shopList = shoppingBag.findByConsumer(u);
+        model.addAttribute("produces", shopList );
+
+
+        return "CONSUMER/consumerCommandWaitingValidation";
+    }
+    @RequestMapping("/consumerCommandList")
+    public String consumerCommandList(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+
+        List<ShoppingBag> commandDetails = shoppingBag.findCommandToConsumer(u);
+        model.addAttribute("commandDetails", commandDetails);
+
+        return "CONSUMER/consumerCommandList";
+    }
+    @RequestMapping("/consumerCommand")
+    public String consumerCommand(@RequestParam int noCommande, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+
+        List<ShoppingBag> commandDetails = shoppingBag.findCommandDetails(noCommande);
+        model.addAttribute("commandDetails", commandDetails);
 
 
 
+        return "CONSUMER/consumerCommand";
+    }
 
+    //TRADER x CONSUMER x ADMIN
 
+    @RequestMapping("/editUser")
+    public String edit(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
 
-    //SELECT p.id, name, category, price, expirationDate, sold, u.email, u.city FROM produce p, shoppingbag s, user u WHERE p.userId = ? AND p.id = s.idProduce AND s.idUser = u.id AND sold = 1 AND p.id = ?;
-    //SELECT s.noCommande from shoppingbag s , produce p where s.idProduce = p.id AND p.userId = 5 GROUP BY s.noCommande;
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        model.addAttribute("user", user);
+        return "updateProfil";
+    }
+    @RequestMapping("/updateUser")
+    public String updateUser(User u, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User userToGetID = (User) session.getAttribute("user");
+        u.setId(userToGetID.getId());
+        u.setTrader(userToGetID.getTrader());
+        u.setAdmin(userToGetID.getAdmin());
+        u.setTraderValidation(userToGetID.getTraderValidation());
+        user.update(u);
+        session.setAttribute("user", u);
+        return "index";
+    }
 
 }

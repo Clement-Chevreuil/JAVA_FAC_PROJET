@@ -13,6 +13,7 @@
     <title>Title</title>
 </head>
 <body>
+<a href="Deconnexion">Deconnexion</a>
 <table>
     <h1>Shopping Bag</h1>
     <tr>
@@ -48,6 +49,6 @@
     </c:forEach>
 </table>
 
-<a href="index.jsp">Accueil</a>
+<a href="ConsumerIndex">Accueil</a>
 </body>
 </html>

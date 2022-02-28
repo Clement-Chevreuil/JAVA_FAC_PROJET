@@ -15,57 +15,33 @@ public class UserMetierImpl implements IUserMetier {
         this.dao = dao;
     }
 
-    public void add(User u) throws SQLException {
-        dao.addUser(u);
-    }
+    @Override
+    public void add(User u) throws SQLException {dao.add(u);}
+    @Override
+    public void update(User u) throws SQLException {dao.update(u);}
+    @Override
+    public void delete(int id) throws SQLException {dao.delete(id);}
+    @Override
+    public void validationTrader(int i) throws SQLException {dao.validateTrader(i);}
+
 
     @Override
-    public User connexion(User u) throws SQLException {
-        return dao.connexionUser(u);
-    }
+    public List<User> findAll() throws SQLException {return dao.findAll();}
+    @Override
+    public List<User> findAllConsumers() throws SQLException {return dao.findAllConsumers();}
+    @Override
+    public List<User> findAllTraders() throws SQLException {return dao.findAllTraders();}
 
-    public User find(int id) {
-
-        return dao.getUser(id);
-    }
-
-    public List<User> findAll() throws SQLException {
-
-        return dao.getAllUsers();
-    }
 
     @Override
-    public List<User> findAllConsumers() throws SQLException {
-        return dao.getAllConsumers();
-    }
+    public User connexion(User u) throws SQLException {return dao.connexion(u);}
+    @Override
+    public User find(int id) {return dao.find(id);}
+
 
     @Override
-    public List<User> findAllTraders() throws SQLException {
-        return dao.getAllTraders();
-    }
-
-    public void update(User u) throws SQLException {
-        dao.updateUser(u);
-
-    }
-
+    public Integer StatisticYear(String option1) throws SQLException {return dao.StaticYear(option1);}
     @Override
-    public void validationTrader(int i) throws SQLException {
-        dao.validateTrader(i);
-    }
-
-    public void delete(int id) throws SQLException {
-        dao.deleteUser(id);
-
-    }
-
-    @Override
-    public Integer StatisticYear(String option1) throws SQLException {
-        return dao.StaticYear(option1);
-    }
-    @Override
-    public Integer StatisticMonth(int option1, String option2) throws SQLException {
-        return dao.StaticMonth(option1, option2);
-    }
+    public Integer StatisticMonth(int option1, String option2) throws SQLException {return dao.StaticMonth(option1, option2);}
 
 }

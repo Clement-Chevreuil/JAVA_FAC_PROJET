@@ -11,45 +11,26 @@ public class ProduceMetierImpl implements IProduceMetier {
 
     private IProduceDAO dao;
 
+
     public void setDao(IProduceDAO dao) {
         this.dao = dao;
     }
-
-    public void add(Produce p) throws SQLException {
-        dao.addProduce(p);
-    }
-
+    @Override
+    public void add(Produce p) throws SQLException {dao.add(p);}
+    @Override
+    public void update(Produce p) throws SQLException {dao.update(p);}
+    @Override
+    public void delete(int id) throws SQLException {dao.delete(id);}
 
     @Override
-    public Produce find(int id) throws SQLException {
-        Produce produce = dao.findProduce(id);
-        return produce;
-    }
+    public List<Produce> findAll() throws SQLException {return dao.findAll();}
+    @Override
+    public List<Produce> findNotReserve(User u) throws SQLException {return dao.findProduceNotReserve(u);}
+    @Override
+    public List<Produce> findByUserID(User u) throws SQLException {return dao.findProduceByUserID(u);}
 
     @Override
-    public void update(Produce p) throws SQLException {
-        dao.updateProduce(p);
-    }
-
-    @Override
-    public void delete(int id) throws SQLException {
-        dao.deleteProduce(id);
-    }
-
-    @Override
-    public List<Produce> findAll() throws SQLException {
-        return dao.findAllProduce();
-    }
-
-    @Override
-    public List<Produce> findAllNotReserve(User u) throws SQLException {
-        return dao.findAllProduceNotReserve(u);
-    }
-
-    @Override
-    public List<Produce> findAllByUserID(User u) throws SQLException {
-        return dao.findAllProduceByUserID(u);
-    }
+    public Produce find(int id) throws SQLException {return dao.find(id);}
 
 
 

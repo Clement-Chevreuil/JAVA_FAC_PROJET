@@ -71,9 +71,10 @@
     </script>
 </head>
 <body>
+    <a href="Deconnexion">Deconnexion</a>
     <div id="chart_div" style="width: 100%; height: 500px;"></div>
     <div id="chart_div2" style="width: 100%; height: 500px;"></div>
-    <a href="index.jsp">Accueil</a>
+    <a href="AdminIndex">Accueil</a>
 
 
 </body>

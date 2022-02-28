@@ -13,11 +13,11 @@
     <title>Title</title>
 </head>
 <body>
+    <a href="Deconnexion">Deconnexion</a>
     <H1>Trader</H1>
 
     <a type="button" href="editUser">UPDATE PROFIL</a>
-    <br>
-    <a href="index.jsp">Home</a>
+
 
     <h2>ADD PRODUCE</h2>
 
@@ -70,8 +70,14 @@
                 <td>${t.expirationDate}</td>
                 <td>${t.sold}</td>
                 <td>
-                    <a href="deleteProduce?id=${t.id}">Delete</a>
-                    <a href="editProduce?id=${t.id}">Edit</a>
+                    <c:if test="${t.sold == 0}">
+                        <a href="deleteProduce?id=${t.id}">Delete</a>
+                        <a href="editProduce?id=${t.id}">Edit</a>
+                    </c:if>
+                    <c:if test="${t.sold == 1}">
+                        <p>NO CHANGE POSSIBLE</p>
+                    </c:if>
+
                 </td>
             </tr>
         </c:forEach>

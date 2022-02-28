@@ -42,7 +42,7 @@ public class ShoppingBagDAOImpl implements IShoppingBagDAO{
     }
 
     @Override
-    public void addShoppingBag(ShoppingBag shoppingBag) throws SQLException {
+    public void add(ShoppingBag shoppingBag) throws SQLException {
 
         String sql = "INSERT INTO shoppingbag (idUser, idProduce) VALUES (?,?)";
 
@@ -58,10 +58,10 @@ public class ShoppingBagDAOImpl implements IShoppingBagDAO{
     }
 
     @Override
-    public void updateShoppingBag(ShoppingBag shoppingBag) throws SQLException {}
+    public void update(ShoppingBag shoppingBag) throws SQLException {}
 
     @Override
-    public void deleteShoppingBag(ShoppingBag shoppingBag) throws SQLException {
+    public void delete(ShoppingBag shoppingBag) throws SQLException {
 
         String sql = "DELETE FROM shoppingbag where idUser = ? AND idProduce = ?";
 
@@ -75,124 +75,8 @@ public class ShoppingBagDAOImpl implements IShoppingBagDAO{
         disconnect();
 
     }
-
     @Override
-    public List<ShoppingBag> getAllShoppingBagConsumer(User u) throws SQLException {
-
-        List<ShoppingBag> shoppingBagList = new ArrayList<>();
-        String sql = "SELECT s.id, idUser, idProduce, name, category, price, expirationDate FROM shoppingbag s, produce p WHERE s.idUser = ? AND p.id = s.idProduce AND noCommande IS NULL;";
-
-        connect();
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setInt(1, u.getId());
-
-        ResultSet result = statement.executeQuery();
-
-        while (result.next()) {
-
-            int id = result.getInt("id");
-            int idUser = result.getInt("idUser");
-            int idProduce = result.getInt("idProduce");
-
-            String name = result.getString("name");
-            String category = result.getString("category");
-            Double price = result.getDouble("price");;
-            String expirationDate = result.getString("expirationDate");
-
-            User userBag = new User();
-
-            Produce produceBag = new Produce();
-            userBag.setId(idUser);
-            produceBag.setId(idProduce);
-            produceBag.setName(name);
-            produceBag.setCategory(category);
-            produceBag.setPrice(price);
-            produceBag.setExpirationDate(expirationDate);
-
-            ShoppingBag shoppingBag = new ShoppingBag(id, userBag, produceBag);
-            shoppingBagList.add(shoppingBag);
-        }
-        statement.close();
-        disconnect();
-
-        return shoppingBagList;
-    }
-
-    @Override
-    public List<ShoppingBag> getAllShoppingBag() throws SQLException {
-        List<ShoppingBag> shoppingBagList = new ArrayList<>();
-        String sql = "SELECT * FROM shoppingbag";
-
-        connect();
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        //statement.setString(1, u.getEmail());
-
-        ResultSet result = statement.executeQuery();
-
-        while (result.next()) {
-
-            int id = result.getInt("id");
-            int idUser = result.getInt("idUser");
-            int idProduce = result.getInt("idProduce");
-            User userBag = new User();
-            Produce produceBag = new Produce();
-            userBag.setId(idUser);
-            produceBag.setId(idProduce);
-            ShoppingBag shoppingBag = new ShoppingBag(id, userBag, produceBag);
-            shoppingBagList.add(shoppingBag);
-        }
-
-        statement.close();
-        disconnect();
-
-        return shoppingBagList;
-    }
-
-    @Override
-    public List<ShoppingBag> getAllShoppingBagValidateConsumer(User u) throws SQLException {
-        List<ShoppingBag> shoppingBagList = new ArrayList<>();
-        String sql = "SELECT s.id, idUser, idProduce, name, category, price, expirationDate, noCommande, dateCommandeValidate FROM shoppingbag s, produce p WHERE s.idUser = ? AND p.id = s.idProduce AND noCommande IS NOT NULL;";
-
-        connect();
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setInt(1, u.getId());
-
-        ResultSet result = statement.executeQuery();
-
-        while (result.next()) {
-
-            int id = result.getInt("id");
-            int idUser = result.getInt("idUser");
-            int idProduce = result.getInt("idProduce");
-            int noCommande = result.getInt("noCommande");
-
-            String name = result.getString("name");
-            String category = result.getString("category");
-            Double price = result.getDouble("price");;
-            String expirationDate = result.getString("expirationDate");
-            String dateCommandeValidate = result.getString("dateCommandeValidate");
-
-            User userBag = new User();
-
-            Produce produceBag = new Produce();
-            userBag.setId(idUser);
-            produceBag.setId(idProduce);
-            produceBag.setName(name);
-            produceBag.setCategory(category);
-            produceBag.setPrice(price);
-            produceBag.setExpirationDate(expirationDate);
-
-            ShoppingBag shoppingBag = new ShoppingBag(id, userBag, produceBag, noCommande, dateCommandeValidate);
-            shoppingBagList.add(shoppingBag);
-        }
-        statement.close();
-        disconnect();
-
-        return shoppingBagList;
-    }
-
-    @Override
-    public void commandValidation(ShoppingBag s) throws SQLException {
+    public void bagValidation(ShoppingBag s) throws SQLException {
         String sql1 = "SELECT MAX(noCommande) as no FROM shoppingbag";
         String sql2 = "UPDATE shoppingbag SET noCommande = ? , dateCommandeValidate = NOW(), dateClickAndCollect = ? WHERE idUser = ? AND noCommande IS NULL";
         String sql3 = "SELECT id FROM shoppingbag WHERE idUser <> ? AND idProduce IN (SELECT idProduce FROM shoppingbag WHERE noCommande = ?);";
@@ -255,8 +139,126 @@ public class ShoppingBagDAOImpl implements IShoppingBagDAO{
 
     }
 
+
     @Override
-    public List<ShoppingBag> findAllCommandToTrader(User u) throws SQLException {
+    public List<ShoppingBag> findByConsumer(User u) throws SQLException {
+
+        List<ShoppingBag> shoppingBagList = new ArrayList<>();
+        String sql = "SELECT s.id, idUser, idProduce, name, category, price, expirationDate FROM shoppingbag s, produce p WHERE s.idUser = ? AND p.id = s.idProduce AND noCommande IS NULL;";
+
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, u.getId());
+
+        ResultSet result = statement.executeQuery();
+
+        while (result.next()) {
+
+            int id = result.getInt("id");
+            int idUser = result.getInt("idUser");
+            int idProduce = result.getInt("idProduce");
+
+            String name = result.getString("name");
+            String category = result.getString("category");
+            Double price = result.getDouble("price");;
+            String expirationDate = result.getString("expirationDate");
+
+            User userBag = new User();
+
+            Produce produceBag = new Produce();
+            userBag.setId(idUser);
+            produceBag.setId(idProduce);
+            produceBag.setName(name);
+            produceBag.setCategory(category);
+            produceBag.setPrice(price);
+            produceBag.setExpirationDate(expirationDate);
+
+            ShoppingBag shoppingBag = new ShoppingBag(id, userBag, produceBag);
+            shoppingBagList.add(shoppingBag);
+        }
+        statement.close();
+        disconnect();
+
+        return shoppingBagList;
+    }
+
+    @Override
+    public List<ShoppingBag> findAll() throws SQLException {
+        List<ShoppingBag> shoppingBagList = new ArrayList<>();
+        String sql = "SELECT * FROM shoppingbag";
+
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        //statement.setString(1, u.getEmail());
+
+        ResultSet result = statement.executeQuery();
+
+        while (result.next()) {
+
+            int id = result.getInt("id");
+            int idUser = result.getInt("idUser");
+            int idProduce = result.getInt("idProduce");
+            User userBag = new User();
+            Produce produceBag = new Produce();
+            userBag.setId(idUser);
+            produceBag.setId(idProduce);
+            ShoppingBag shoppingBag = new ShoppingBag(id, userBag, produceBag);
+            shoppingBagList.add(shoppingBag);
+        }
+
+        statement.close();
+        disconnect();
+
+        return shoppingBagList;
+    }
+
+    @Override
+    public List<ShoppingBag> findValidate(User u) throws SQLException {
+        List<ShoppingBag> shoppingBagList = new ArrayList<>();
+        String sql = "SELECT s.id, idUser, idProduce, name, category, price, expirationDate, noCommande, dateCommandeValidate FROM shoppingbag s, produce p WHERE s.idUser = ? AND p.id = s.idProduce AND noCommande IS NOT NULL;";
+
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, u.getId());
+
+        ResultSet result = statement.executeQuery();
+
+        while (result.next()) {
+
+            int id = result.getInt("id");
+            int idUser = result.getInt("idUser");
+            int idProduce = result.getInt("idProduce");
+            int noCommande = result.getInt("noCommande");
+
+            String name = result.getString("name");
+            String category = result.getString("category");
+            Double price = result.getDouble("price");;
+            String expirationDate = result.getString("expirationDate");
+            String dateCommandeValidate = result.getString("dateCommandeValidate");
+
+            User userBag = new User();
+
+            Produce produceBag = new Produce();
+            userBag.setId(idUser);
+            produceBag.setId(idProduce);
+            produceBag.setName(name);
+            produceBag.setCategory(category);
+            produceBag.setPrice(price);
+            produceBag.setExpirationDate(expirationDate);
+
+            ShoppingBag shoppingBag = new ShoppingBag(id, userBag, produceBag, noCommande, dateCommandeValidate);
+            shoppingBagList.add(shoppingBag);
+        }
+        statement.close();
+        disconnect();
+
+        return shoppingBagList;
+    }
+
+
+
+    @Override
+    public List<ShoppingBag> findCommandToTrader(User u) throws SQLException {
 
         List<ShoppingBag> shoppingBagList = new ArrayList<>();
         String sql = " SELECT s.noCommande, s.dateCommandeValidate, u.country, u.city, u.firstName, u.lastName, u.postCode, u.street, u.id, u.email from shoppingbag s , produce p, user u where s.idProduce = p.id AND p.userId = ? AND p.userId = u.id GROUP BY s.noCommande;";
@@ -293,7 +295,7 @@ public class ShoppingBagDAOImpl implements IShoppingBagDAO{
     }
 
     @Override
-    public List<ShoppingBag> findAllCommandToConsumer(User u) throws SQLException {
+    public List<ShoppingBag> findCommandToConsumer(User u) throws SQLException {
 
         List<ShoppingBag> shoppingBagList = new ArrayList<>();
         String sql = " SELECT s.noCommande, s.dateCommandeValidate from shoppingbag s where idUser = ? GROUP BY s.noCommande;";
@@ -322,7 +324,7 @@ public class ShoppingBagDAOImpl implements IShoppingBagDAO{
     }
 
     @Override
-    public List<ShoppingBag> getDetailsCommande(int noCommande) throws SQLException {
+    public List<ShoppingBag> findCommandDetails(int noCommande) throws SQLException {
 
         System.out.println(noCommande);
         List<ShoppingBag> shoppingBagList = new ArrayList<>();
@@ -362,6 +364,52 @@ public class ShoppingBagDAOImpl implements IShoppingBagDAO{
         disconnect();
 
         return shoppingBagList;
+    }
+
+    @Override
+    public int StatisticYear(String option1) throws SQLException {
+        Integer statistic = 0;
+
+        String sql;
+
+        sql = "SELECT COUNT(id) as stat FROM shoppingbag WHERE YEAR(dateCommandeValidate) = ?;";
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setString(1, option1);
+        ResultSet result = statement.executeQuery();
+        while (result.next())
+        {
+            int max = result.getInt("stat");
+            statistic = max;
+        }
+        statement.close();
+        disconnect();
+
+        return statistic;
+    }
+
+    @Override
+    public int StatisticMonth(int option1, String option2) throws SQLException {
+        Integer statistic = 0;
+
+        String sql;
+        System.out.println(option1);
+        System.out.println(option2);
+        sql = "SELECT COUNT(id) as stat FROM shoppingbag WHERE MONTH (dateCommandeValidate) = ? AND YEAR(dateCommandeValidate) = ? ;";
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, option1);
+        statement.setString(2, option2);
+        ResultSet result = statement.executeQuery();
+        while (result.next())
+        {
+            int max = result.getInt("stat");
+            statistic = max;
+        }
+        statement.close();
+        disconnect();
+
+        return statistic;
     }
 
 

@@ -9,11 +9,14 @@ import java.util.List;
 public interface IProduceDAO {
 
     //WITH BDD
-    public void addProduce(Produce p) throws SQLException;
-    public Produce findProduce(int id) throws SQLException;
-    public void updateProduce(Produce p) throws SQLException;
-    public void deleteProduce(int id) throws SQLException;
-    public List<Produce> findAllProduce() throws SQLException;
-    public List<Produce> findAllProduceByUserID(User u) throws SQLException;
-    List<Produce> findAllProduceNotReserve(User u) throws SQLException;
+    public void add(Produce p) throws SQLException;
+    public void update(Produce p) throws SQLException;
+    public void delete(int id) throws SQLException;
+
+
+    public List<Produce> findAll() throws SQLException;
+    public List<Produce> findProduceByUserID(User u) throws SQLException;
+    public List<Produce> findProduceNotReserve(User u) throws SQLException;
+
+    public Produce find(int id) throws SQLException;
 }

@@ -17,9 +17,11 @@
 
     <a type="button" href="editUser">UPDATE PROFIL</a>
     <br>
-    <a href="index.jsp">Home</a>
 
-    <h2>ADD PRODUCE</h2>
+    <a href="TraderIndex">Accueil</a>
+    <a href="Deconnexion">Deconnexion</a>
+
+    <h2>EDIT PRODUCE</h2>
 
     <%--@elvariable id="produce" type="com.example.application_entreprise_projet.CLASS.Produce"--%>
     <f:form modelAttribute="produce" method="post" action="updateProduce">

@@ -41,7 +41,7 @@ public class ProduceDAOImpl implements IProduceDAO{
     }
 
     @Override
-    public void addProduce(Produce p) throws SQLException {
+    public void add(Produce p) throws SQLException {
 
         String sql = "INSERT INTO produce (name, category, price, expirationDate, userId, sold) VALUES (?,?,?,?,?, 0)";
 
@@ -57,9 +57,125 @@ public class ProduceDAOImpl implements IProduceDAO{
         statement.close();
         disconnect();
     }
+    @Override
+    public void update(Produce p ) throws SQLException {
+        System.out.println("hello2");
+        String sql = "UPDATE produce SET name = ?, category = ?,  price = ?, expirationDate = ? WHERE id = ?";
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+
+        statement.setString(1, p.getName());
+        statement.setString(2, p.getCategory());
+        statement.setDouble(3, p.getPrice());
+        statement.setString(4, p.getExpirationDate());
+        statement.setInt(5, p.getId());
+
+        statement.executeUpdate();
+        statement.close();
+        disconnect();
+
+    }
+    @Override
+    public void delete(int id) throws SQLException {
+        String sql = "DELETE FROM produce where id = ?";
+
+        connect();
+
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, id);
+
+        boolean rowDeleted = statement.executeUpdate() > 0;
+        statement.close();
+        disconnect();
+    }
 
     @Override
-    public Produce findProduce(int id) throws SQLException {
+    public List<Produce> findAll() throws SQLException {
+        List<Produce> listProduce = new ArrayList<>();
+        String sql = "SELECT * FROM produce";
+
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        //statement.setString(1, u.getEmail());
+
+        ResultSet result = statement.executeQuery();
+
+        while (result.next()) {
+
+            int id = result.getInt("id");
+            String name = result.getString("name");
+            String category = result.getString("category");
+            Double price = result.getDouble("price");
+            String expirationDate = result.getString("expirationDate");
+            int sold = result.getInt("sold");
+            Produce produce = new Produce(id, name, category, price, expirationDate, sold);
+            listProduce.add(produce);
+        }
+
+        statement.close();
+        disconnect();
+
+        return listProduce;
+    }
+    @Override
+    public List<Produce> findProduceByUserID(User u) throws SQLException {
+        List<Produce> listProduce = new ArrayList<>();
+        String sql = "SELECT p.id, name, category, price, expirationDate, sold FROM produce p WHERE userId = ?";
+
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, u.getId());
+
+        ResultSet result = statement.executeQuery();
+
+        while (result.next()) {
+
+            int id = result.getInt("id");
+            String name = result.getString("name");
+            String category = result.getString("category");
+            Double price = result.getDouble("price");
+            String expirationDate = result.getString("expirationDate");
+            int sold = result.getInt("sold");
+            Produce produce = new Produce(id, name, category, price, expirationDate, sold);
+            listProduce.add(produce);
+        }
+
+        statement.close();
+        disconnect();
+
+        return listProduce;
+    }
+    @Override
+    public List<Produce> findProduceNotReserve(User u) throws SQLException {
+        List<Produce> listProduce = new ArrayList<>();
+        String sql = "SELECT * FROM produce WHERE id NOT IN (SELECT idProduce FROM shoppingbag WHERE idUser = ? ) AND sold = 0 ";
+
+        connect();
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, u.getId());
+
+        ResultSet result = statement.executeQuery();
+
+        while (result.next()) {
+
+            int id = result.getInt("id");
+            String name = result.getString("name");
+            String category = result.getString("category");
+            Double price = result.getDouble("price");
+            String expirationDate = result.getString("expirationDate");
+            int sold = result.getInt("sold");
+            Produce produce = new Produce(id, name, category, price, expirationDate, sold);
+            listProduce.add(produce);
+        }
+
+        statement.close();
+        disconnect();
+
+        return listProduce;
+    }
+
+    @Override
+    public Produce find(int id) throws SQLException {
 
         Produce producenew = new Produce();
         String sql = "SELECT * FROM produce WHERE id = ?";
@@ -88,126 +204,5 @@ public class ProduceDAOImpl implements IProduceDAO{
         return producenew;
     }
 
-    @Override
-    public void updateProduce(Produce p ) throws SQLException {
-        System.out.println("hello2");
-        String sql = "UPDATE produce SET name = ?, category = ?,  price = ?, expirationDate = ? WHERE id = ?";
-        connect();
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-
-        statement.setString(1, p.getName());
-        statement.setString(2, p.getCategory());
-        statement.setDouble(3, p.getPrice());
-        statement.setString(4, p.getExpirationDate());
-        statement.setInt(5, p.getId());
-
-        statement.executeUpdate();
-        statement.close();
-        disconnect();
-
-    }
-
-    @Override
-    public void deleteProduce(int id) throws SQLException {
-        String sql = "DELETE FROM produce where id = ?";
-
-        connect();
-
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setInt(1, id);
-
-        boolean rowDeleted = statement.executeUpdate() > 0;
-        statement.close();
-        disconnect();
-    }
-
-    @Override
-    public List<Produce> findAllProduce() throws SQLException {
-        List<Produce> listProduce = new ArrayList<>();
-        String sql = "SELECT * FROM produce";
-
-        connect();
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        //statement.setString(1, u.getEmail());
-
-        ResultSet result = statement.executeQuery();
-
-        while (result.next()) {
-
-            int id = result.getInt("id");
-            String name = result.getString("name");
-            String category = result.getString("category");
-            Double price = result.getDouble("price");
-            String expirationDate = result.getString("expirationDate");
-            int sold = result.getInt("sold");
-            Produce produce = new Produce(id, name, category, price, expirationDate, sold);
-            listProduce.add(produce);
-        }
-
-        statement.close();
-        disconnect();
-
-        return listProduce;
-    }
-
-    @Override
-    public List<Produce> findAllProduceByUserID(User u) throws SQLException {
-        List<Produce> listProduce = new ArrayList<>();
-        String sql = "SELECT p.id, name, category, price, expirationDate, sold FROM produce p WHERE userId = ?";
-
-        connect();
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setInt(1, u.getId());
-
-        ResultSet result = statement.executeQuery();
-
-        while (result.next()) {
-
-            int id = result.getInt("id");
-            String name = result.getString("name");
-            String category = result.getString("category");
-            Double price = result.getDouble("price");
-            String expirationDate = result.getString("expirationDate");
-            int sold = result.getInt("sold");
-            Produce produce = new Produce(id, name, category, price, expirationDate, sold);
-            listProduce.add(produce);
-        }
-
-        statement.close();
-        disconnect();
-
-        return listProduce;
-    }
-
-    @Override
-    public List<Produce> findAllProduceNotReserve(User u) throws SQLException {
-        List<Produce> listProduce = new ArrayList<>();
-        String sql = "SELECT * FROM produce WHERE id NOT IN (SELECT idProduce FROM shoppingbag WHERE idUser = ? ) AND sold = 0 ";
-
-        connect();
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setInt(1, u.getId());
-
-        ResultSet result = statement.executeQuery();
-
-        while (result.next()) {
-
-            int id = result.getInt("id");
-            String name = result.getString("name");
-            String category = result.getString("category");
-            Double price = result.getDouble("price");
-            String expirationDate = result.getString("expirationDate");
-            int sold = result.getInt("sold");
-            Produce produce = new Produce(id, name, category, price, expirationDate, sold);
-            listProduce.add(produce);
-        }
-
-        statement.close();
-        disconnect();
-
-        return listProduce;
-    }
-
-    private void init() {
-    }
+    private void init() {}
 }

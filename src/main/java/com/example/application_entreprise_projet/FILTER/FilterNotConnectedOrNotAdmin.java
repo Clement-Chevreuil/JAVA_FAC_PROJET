@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/AdminIndex"})
+@WebFilter(urlPatterns = {"/AdminIndex", "/validationTrader", "/deleteUser", "/adminStatic"})
 public class FilterNotConnectedOrNotAdmin implements Filter {
     public void init(FilterConfig config) throws ServletException {
     }
@@ -32,8 +32,19 @@ public class FilterNotConnectedOrNotAdmin implements Filter {
             User user = (User) session.getAttribute("user");
             if(user.getAdmin() == false || user.getTrader() == true)
             {
-                System.out.println("error");
-                ((HttpServletResponse) response).sendRedirect("index.jsp");
+                System.out.println("error redirection ot the good page");
+                if(user.getTrader() == true)
+                {
+                    ((HttpServletResponse) response).sendRedirect("TraderIndex");
+                }
+                else if(user.getTrader() == false)
+                {
+                    ((HttpServletResponse) response).sendRedirect("ConsumerIndex");
+                }
+                else
+                {
+                    ((HttpServletResponse) response).sendRedirect("index.jsp");
+                }
             }
             else
             {

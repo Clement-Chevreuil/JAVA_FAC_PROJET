@@ -10,11 +10,9 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>Catalogue de produits</title>
-
-
-
 </head>
 <body>
+<a href="Deconnexion">Deconnexion</a>
 <%--@elvariable id="user" type="com.example.application_entreprise_projet.CLASS.User"--%>
 <table>
     <tr>
@@ -76,12 +74,14 @@
 
     <p>Begin Year</p>
 
-    <input name="option" type="number" min="2018" max="<%= calendar.get(Calendar.YEAR) %>">
+    <select name="option">
+        <% for(int i = 2018; i < calendar.get(Calendar.YEAR) + 1; i++) { %>
+            <option value="<%= i %>"><%= i %></option>
+        <% } %>
+    </select>
 
     <button type=submit">CLICK</button>
 
 </form>
-<a href="index.jsp">Accueil</a>
-
 </body>
 </html>

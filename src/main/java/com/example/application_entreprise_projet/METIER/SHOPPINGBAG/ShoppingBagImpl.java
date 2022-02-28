@@ -14,55 +14,32 @@ public class ShoppingBagImpl implements IShoppingBagMetier{
     public void setDao(IShoppingBagDAO dao) {
         this.dao = dao;
     }
+    @Override
+    public void add(ShoppingBag shoppingBag) throws SQLException {dao.add(shoppingBag);}
+    @Override
+    public void update(ShoppingBag shoppingBag) throws SQLException {dao.update(shoppingBag);}
+    @Override
+    public void delete(ShoppingBag shoppingBag) throws SQLException {dao.delete(shoppingBag);}
+    @Override
+    public void bagValidation(ShoppingBag s) throws SQLException {dao.bagValidation(s);}
 
     @Override
-    public void addBag(ShoppingBag shoppingBag) throws SQLException {
-        dao.addShoppingBag(shoppingBag);
-    }
+    public List<ShoppingBag> findAll() throws SQLException {return dao.findAll();}
+    @Override
+    public List<ShoppingBag> findByConsumer(User u) throws SQLException {return dao.findByConsumer(u);}
+    @Override
+    public List<ShoppingBag> findValidate(User u) throws SQLException {return dao.findValidate(u);}
+    @Override
+    public List<ShoppingBag> findCommandToTrader(User u) throws SQLException {return dao.findCommandToTrader(u);}
+    @Override
+    public List<ShoppingBag> findCommandToConsumer(User u) throws SQLException {return dao.findCommandToConsumer(u);}
+    @Override
+    public List<ShoppingBag> findCommandDetails(int noCommande) throws SQLException {return dao.findCommandDetails(noCommande);}
+
 
     @Override
-    public void updateBag(ShoppingBag shoppingBag) throws SQLException {
-        dao.updateShoppingBag(shoppingBag);
-    }
-
+    public int StatisticYear(String option) throws SQLException {return dao.StatisticYear(option);}
     @Override
-    public void deleteBag(ShoppingBag shoppingBag) throws SQLException {
-        dao.deleteShoppingBag(shoppingBag);
-    }
-
-    @Override
-    public List<ShoppingBag> getAllBagConsumer(User u) throws SQLException {
-        return dao.getAllShoppingBagConsumer(u);
-    }
-
-    @Override
-    public List<ShoppingBag> getAllBagValidateConsumer(User u) throws SQLException {
-        return dao.getAllShoppingBagValidateConsumer(u);
-    }
-
-    @Override
-    public List<ShoppingBag> getAllBag() throws SQLException {
-        return dao.getAllShoppingBag();
-    }
-
-    @Override
-    public void bagValidation(ShoppingBag s) throws SQLException {
-        dao.commandValidation(s);
-    }
-
-    @Override
-    public List<ShoppingBag> findAllCommande(User u) throws SQLException {
-        return dao.findAllCommandToTrader(u);
-    }
-
-    @Override
-    public List<ShoppingBag> getDetailsCommande(int noCommande) throws SQLException {
-        return dao.getDetailsCommande(noCommande);
-    }
-
-    @Override
-    public List<ShoppingBag> findAllCommandToConsumer(User u) throws SQLException {
-        return dao.findAllCommandToConsumer(u);
-    }
+    public int StatisticMonth(int i, String option) throws SQLException {return dao.StatisticMonth(i, option);}
 
 }

@@ -20,8 +20,7 @@
     <br>
     <a type="button" href="consumerCommandList">Bag List Buy</a>
     <br>
-    <a href="index.jsp">Accueil</a>
-    <br>
+    <a href="Deconnexion">Deconnexion</a>
     <h2>LIST PRODUCE</h2>
 
     <table>
