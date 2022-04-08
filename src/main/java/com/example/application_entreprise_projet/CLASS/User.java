@@ -22,6 +22,22 @@ public class User {
     //CONSTRUCTOR
 
 
+    public User(int id, String email, String password, String city, int postCode, String street, String country, Boolean admin, Boolean trader, Boolean traderValidation, String firstName, String lastName) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.city = city;
+        this.postCode = postCode;
+        this.street = street;
+        this.country = country;
+        this.admin = admin;
+        this.trader = trader;
+        this.traderValidation = traderValidation;
+        this.shoppingBag = shoppingBag;
+        this.dateAdhesion = dateAdhesion;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public User(int id, String firstName, String lastName, String email, String country, String city, int postCode, String street) {
         this.id = id;

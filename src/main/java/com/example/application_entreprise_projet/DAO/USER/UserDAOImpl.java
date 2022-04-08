@@ -233,7 +233,9 @@ public class UserDAOImpl implements IUserDAO {
             Boolean admin = result.getBoolean("admin");
             Boolean trader = result.getBoolean("trader");
             Boolean traderValidation = result.getBoolean("traderValidation");
-            user = new User(id, email, password, country, city, postCode, street, admin, trader, traderValidation);
+            String firstName = result.getString("firstName");
+            String lastName = result.getString("lastName");
+            user = new User(id, email, password,city, postCode, country,  street, admin, trader, traderValidation, firstName, lastName);
         }
 
         statement.close();

@@ -11,17 +11,18 @@
 <html>
 <head>
     <title>Title</title>
+    <jsp:include page="../bootstrap.jsp" />
 </head>
 <body>
-<a href="Deconnexion">Deconnexion</a>
-<a href="ConsumerIndex">Accueil</a>
-<table>
+<jsp:include page="../navbar.jsp" />
+
+<table class="table table-secondary table-striped">
     <h1>COMMAND RECAP</h1>
 
     <tr>
-        <th>COMMANDE DATE</th>
-        <th>COMMANDE NUMBER</th>
-        <th>ACTIONS</th>
+        <th><center>COMMANDE DATE</center></th>
+        <th><center>COMMANDE NUMBER</center></th>
+        <th><center>ACTIONS</center></th>
     </tr>
     <c:forEach items="${commandDetails}" var="c">
         <tr>

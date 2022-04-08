@@ -11,19 +11,22 @@
 <html>
 <head>
     <title>Title</title>
+    <jsp:include page="../bootstrap.jsp" />
 </head>
 <body>
+<jsp:include page="../navbar.jsp" />
     <H1>Consumer</H1>
-    <a type="button" href="editUser">UPDATE PROFIL</a>
-    <br>
-    <a type="button" href="ShoppingBagWaiting">Bag List Loading</a>
-    <br>
-    <a type="button" href="consumerCommandList">Bag List Buy</a>
-    <br>
-    <a href="Deconnexion">Deconnexion</a>
+
+
+            <a type="button" class="btn btn-secondary" href="editUser">UPDATE PROFIL</a>
+            <a type="button" class="btn btn-secondary"href="ShoppingBagWaiting">Bag List Loading</a>
+            <a type="button"  class="btn btn-secondary" href="consumerCommandList">Bag List Buy</a>
+
+<br>
     <h2>LIST PRODUCE</h2>
 
-    <table>
+
+    <table class="table table-secondary table-striped">
         <tr>
             <th>ID</th>
             <th>EMAIL</th>

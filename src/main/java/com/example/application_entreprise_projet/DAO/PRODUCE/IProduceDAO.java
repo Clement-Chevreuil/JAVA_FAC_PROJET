@@ -15,7 +15,7 @@ public interface IProduceDAO {
 
 
     public List<Produce> findAll() throws SQLException;
-    public List<Produce> findProduceByUserID(User u) throws SQLException;
+    public List<Produce> findByUserID(User u) throws SQLException;
     public List<Produce> findProduceNotReserve(User u) throws SQLException;
 
     public Produce find(int id) throws SQLException;

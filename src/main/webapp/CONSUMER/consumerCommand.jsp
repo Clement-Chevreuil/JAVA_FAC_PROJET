@@ -11,10 +11,11 @@
 <html>
 <head>
     <title>Title</title>
+    <jsp:include page="../bootstrap.jsp" />
 </head>
 <body>
-<a href="Deconnexion">Deconnexion</a>
-<table>
+<jsp:include page="../navbar.jsp" />
+<table class="table table-secondary table-striped">
     <h1>Shopping Bag</h1>
     <tr>
         <th>NAME</th>
@@ -48,7 +49,5 @@
         </tr>
     </c:forEach>
 </table>
-
-<a href="ConsumerIndex">Accueil</a>
 </body>
 </html>

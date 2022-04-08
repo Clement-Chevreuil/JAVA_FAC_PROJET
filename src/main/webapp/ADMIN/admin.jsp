@@ -10,44 +10,52 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>Catalogue de produits</title>
+    <jsp:include page="../bootstrap.jsp" />
 </head>
 <body>
-<a href="Deconnexion">Deconnexion</a>
+<jsp:include page="../navbar.jsp" />
 <%--@elvariable id="user" type="com.example.application_entreprise_projet.CLASS.User"--%>
-<table>
+
+<div class="container">
+    <div class="row align-items-center justify-content-md-center " style="height:50vh">
+        <div class="col">
+<table class="table table-secondary table-striped">
+    <thead>
     <tr>
-        <th>ID</th>
-        <th>EMAIL</th>
-        <th>TRADER</th>
-        <th>DELETE</th>
+        <th scope="col">ID</th>
+        <th scope="col">EMAIL</th>
+        <th scope="col">DELETE</th>
     </tr>
+    </thead>
+    <tbody>
     <c:forEach items="${consumers}" var="u">
+
         <tr>
             <td>${u.id}</td>
             <td>${u.email}</td>
-            <td>${u.trader}</td>
             <td><a href="deleteUser?id=${u.id}">Delete</a></td>
         </tr>
+
     </c:forEach>
+    </tbody>
 </table>
+        </div>
+        <div class="col">
 
-<br>
-<br>
-<br>
-
-<table>
+<table class="table table-secondary table-striped">
+    <thead>
     <tr>
         <th>ID</th>
         <th>EMAIL</th>
-        <th>TRADER</th>
         <th>DELETE</th>
         <th>ACCEPT</th>
     </tr>
+    </thead>
+    <tbody>
     <c:forEach items="${traders}" var="t">
         <tr>
             <td>${t.id}</td>
             <td>${t.email}</td>
-            <td>${t.trader}</td>
             <td><a href="deleteUser?id=${t.id}">Delete</a></td>
             <td>
                 <c:if test="${t.traderValidation == false}">
@@ -59,7 +67,9 @@
             </td>
         </tr>
     </c:forEach>
+    </tbody>
 </table>
+        </div>
 
 <form action="adminStatistic">
 
@@ -72,16 +82,20 @@
         calendar.setTime(date);
     %>
 
-    <p>Begin Year</p>
+    <center><h3>Begin Year</h3></center>
 
-    <select name="option">
+    <select class="form-select" name="option">
         <% for(int i = 2018; i < calendar.get(Calendar.YEAR) + 1; i++) { %>
             <option value="<%= i %>"><%= i %></option>
         <% } %>
     </select>
 
-    <button type=submit">CLICK</button>
+    <br>
+
+    <center><button class="btn btn-primary"type=submit">CLICK</button></center>
 
 </form>
+    </div>
+</div>
 </body>
 </html>

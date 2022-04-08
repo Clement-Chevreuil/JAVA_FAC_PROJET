@@ -9,13 +9,20 @@
 <html>
 <head>
     <title>Title</title>
+    <jsp:include page="../bootstrap.jsp" />
 </head>
-<body>
-
-  <p>Your account is not validate by a admin you must wait.</p>
+<div>
+<jsp:include page="../navbar.jsp" />
+<div class="container">
+    <div class="row align-items-center justify-content-md-center " style="height:90vh">
+        <div class="col-auto"/>
+  <h3>Your account is not validate by a admin you must wait.</h3>
   <br>
-  <p>Thank you</p>
-  <a href="Deconnexion">Deconnexion</a>
+  <h3>Thank you</h3>
+    </div>
+</div>
+</div>
+
 
 </body>
 </html>

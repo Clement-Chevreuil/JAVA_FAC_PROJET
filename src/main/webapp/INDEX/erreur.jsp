@@ -9,9 +9,17 @@
 <html>
 <head>
     <title>Title</title>
+    <jsp:include page="../bootstrap.jsp" />
 </head>
-<body>
-<p> erreur dans les identifiants</p>
-<a href="../index.jsp">Accueil</a>
+<div>
+<jsp:include page="../navbar.jsp" />
+<div class="container">
+    <div class="row align-items-center justify-content-md-center " style="height:90vh">
+        <div class="col-auto"/>
+<h2> Erreur Connexion</h2>
+    </div>
+</div>
+</div>
+
 </body>
 </html>

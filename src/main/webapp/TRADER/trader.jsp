@@ -11,47 +11,52 @@
 <html>
 <head>
     <title>Title</title>
+    <jsp:include page="../bootstrap.jsp" />
 </head>
 <body>
-    <a href="Deconnexion">Deconnexion</a>
-    <H1>Trader</H1>
-
-    <a type="button" href="editUser">UPDATE PROFIL</a>
-
-
-    <h2>ADD PRODUCE</h2>
+<jsp:include page="../navbar.jsp" />
+<center>
+    <H1 class="mt-2">Trader</H1>
+    <a type="button" class="btn btn-secondary" href="editUser">UPDATE PROFIL</a>
+</center>
+<center>
+    <h2 class="mt-4">ADD PRODUCE</h2>
 
     <%--@elvariable id="produce" type="com.example.application_entreprise_projet.CLASS.Produce"--%>
     <f:form modelAttribute="produce" method="post" action="saveProduce">
         <table>
             <tr>
                 <td>Name :</td>
-                <td><f:input path="name"/></td>
+                <td><f:input class="form-control" path="name"/></td>
 
             </tr>
             <tr>
                 <td>Category :</td>
-                <td><f:input path="category"/></td>
+                <td><f:input class="form-control" path="category"/></td>
 
             </tr>
             <tr>
                 <td>Price :</td>
-                <td><f:input path="price"/></td>
+                <td><f:input class="form-control" path="price"/></td>
 
             </tr>
             <tr>
                 <td>Date Expiration :</td>
-                <td><f:input type="date" path="expirationDate"/></td>
+                <td><f:input class="form-control" type="date" path="expirationDate"/></td>
             </tr>
             <tr>
-                <td><input type="submit" value="Save"/></td>
+                <td><input class="btn btn-secondary" type="submit" value="Save"/></td>
             </tr>
         </table>
     </f:form>
+</center>
 
+<div class="container">
+    <div class="row">
+    <div class="col-6">
     <h2>LIST PRODUCE</h2>
 
-    <table>
+    <table class="table table-secondary table-striped">
         <tr>
             <th>ID</th>
             <th>NAME</th>
@@ -82,10 +87,11 @@
             </tr>
         </c:forEach>
     </table>
-
+    </div>
+    <div class="col-6">
     <h2>LIST Commande Valide</h2>
 
-    <table>
+    <table class="table table-secondary table-striped">
         <tr>
             <th>COMMANDE NUMBER</th>
             <th>DATE COMMANDE</th>
@@ -115,6 +121,9 @@
             </tr>
         </c:forEach>
     </table>
+    </div>
 
+</div>
+</div>
 </body>
 </html>

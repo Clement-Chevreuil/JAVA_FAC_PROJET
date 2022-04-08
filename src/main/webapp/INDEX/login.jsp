@@ -12,28 +12,32 @@
 <html>
 <head>
     <title>Title</title>
+    <jsp:include page="../bootstrap.jsp" />
 </head>
-<body>
+
+<jsp:include page="../navbar.jsp" />
+<div>
+<div class="container">
+    <div class="row align-items-center justify-content-md-center " style="height:90vh">
+        <div class="col-auto"/>
 <%--@elvariable id="user" type="com.example.application_entreprise_projet.CLASS.User"--%>
 <f:form modelAttribute="user" method="post" action="connexion">
-    <table>
-        <tr>
-            <td>Email:</td>
-            <td><f:input path="email"/></td>
 
-        </tr>
-        <tr>
-            <td>Passwors:</td>
-            <td><f:input path="password"/></td>
+    <div  class="mb-3">
+        <h4 for="email">Email:</h4>
+        <f:input style="width: 400px" id="email" class="form-control" placeholder="Email" path="email"/>
+    </div>
 
-        </tr>
-        <tr>
-            <td><input type="submit" value="LOG"/></td>
+    <div  class="mb-3">
+        <h4 for="password">Password:</h4>
+        <f:input style="width: 400px" type="password" id="password" class="form-control" placeholder="Password" path="password"/>
+    </div>
 
-        </tr>
-    </table>
+    <input class="btn btn-secondary" type="submit" value="LOG"/>
 </f:form>
 
-<a href="../index.jsp">Accueil</a>
+    </div>
+</div>
+</div>
 </body>
 </html>

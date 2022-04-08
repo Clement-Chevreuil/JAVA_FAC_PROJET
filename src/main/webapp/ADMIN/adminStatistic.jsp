@@ -9,12 +9,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
+    <jsp:include page="../bootstrap.jsp" />
     <% String test = (String)session.getAttribute("option1"); %>
     <input type="hidden" id="optionTest" value="<%=test%>">
     <title>Title</title>
 
     <%! List<String> listYEAR, listMONTH; %>
-    <%! List<Integer> listStatYEAR, listStatMONTH; %>
+    <%! List<Integer> listStatYEAR, listStatMONTH,listStatYEARShopping, listStatMONTHShopping;%>
     <%! Integer year; %>
     <%! HttpSession session;%>
     <% session = request.getSession(); %>
@@ -22,6 +23,8 @@
     <% listMONTH = (List<String>)session.getAttribute("MONTH"); %>
     <% listStatYEAR = (List<Integer>)session.getAttribute("listStatYEAR"); %>
     <% listStatMONTH = (List<Integer>)session.getAttribute("listStatMONTH"); %>
+    <% listStatYEARShopping = (List<Integer>)session.getAttribute("listStatYEARShopping"); %>
+    <% listStatMONTHShopping = (List<Integer>)session.getAttribute("listStatMONTHShopping"); %>
     <% year = (Integer)session.getAttribute("option"); %>
 
 
@@ -30,6 +33,8 @@
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawChart);
         google.charts.setOnLoadCallback(drawChart2);
+        google.charts.setOnLoadCallback(drawChart3);
+        google.charts.setOnLoadCallback(drawChart4);
 
         function drawChart() {
 
@@ -68,13 +73,52 @@
             var chart = new google.visualization.AreaChart(document.getElementById('chart_div2'));
             chart.draw(data, options);
         }
+
+        function drawChart3() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Year', 'Sales'],
+                <% for (int i = 0; i < listStatYEARShopping.size() ; i++) { %>
+                ["<%= listYEAR.get(i) %>", <%= listStatYEARShopping.get(i) %> ],
+                <% } %>
+            ]);
+
+            var options = {
+                title: 'PRODUCES SOLD YEAR <%= year - 4 %> to <%= year %>',
+                hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
+                vAxis: {minValue: 0}
+            };
+
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div3'));
+            chart.draw(data, options);
+        }
+
+        function drawChart4() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Year', 'Sales'],
+                <% for (int i = 0; i < listStatMONTHShopping.size() ; i++) { %>
+                ["<%= listMONTH.get(i) %>", <%= listStatMONTHShopping.get(i) %> ],
+                <% } %>
+            ]);
+
+            var options = {
+                title: 'PRODUCES SOLD MONTH <%= year %>',
+                hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
+                vAxis: {minValue: 0}
+            };
+
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div4'));
+            chart.draw(data, options);
+        }
     </script>
 </head>
 <body>
-    <a href="Deconnexion">Deconnexion</a>
+    <jsp:include page="../navbar.jsp" />
     <div id="chart_div" style="width: 100%; height: 500px;"></div>
     <div id="chart_div2" style="width: 100%; height: 500px;"></div>
-    <a href="AdminIndex">Accueil</a>
+    <div id="chart_div3" style="width: 100%; height: 500px;"></div>
+    <div id="chart_div4" style="width: 100%; height: 500px;"></div>
 
 
 </body>

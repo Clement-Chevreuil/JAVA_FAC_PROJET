@@ -21,7 +21,8 @@ public class FilterNotConnectedOrNotAdmin implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
 
         System.out.println("filter execution");
-        HttpSession session = ((HttpServletRequest) request).getSession(false);
+        HttpSession session = ((HttpServletRequest) request).getSession(true);
+
         if (session.getAttribute("user") == null ) {
             System.out.println("session null");
             //((HttpServletRequest) request).getRequestDispatcher("index.jsp").include(request, response);

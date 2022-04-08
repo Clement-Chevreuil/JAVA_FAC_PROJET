@@ -27,8 +27,7 @@ public class ProduceMetierImpl implements IProduceMetier {
     @Override
     public List<Produce> findNotReserve(User u) throws SQLException {return dao.findProduceNotReserve(u);}
     @Override
-    public List<Produce> findByUserID(User u) throws SQLException {return dao.findProduceByUserID(u);}
-
+    public List<Produce> findByUserID(User u) throws SQLException {return dao.findByUserID(u);}
     @Override
     public Produce find(int id) throws SQLException {return dao.find(id);}
 

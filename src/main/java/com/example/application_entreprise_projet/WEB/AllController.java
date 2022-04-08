@@ -55,8 +55,8 @@ public class AllController extends HttpServlet {
     }
     @RequestMapping("/connexion")
     public String connexion(User u, HttpServletRequest request, HttpServletResponse response, Model model) throws SQLException, IOException {
-        User userValidation = user.connexion(u);
 
+        User userValidation = user.connexion(u);
         HttpSession session = request.getSession();
 
         if(userValidation != null)
@@ -163,16 +163,23 @@ public class AllController extends HttpServlet {
         List<Integer> statYEAR = new ArrayList<>();
         List<Integer> statMONTH = new ArrayList<>();
 
+        List<Integer> statYEARShopping = new ArrayList<>();
+        List<Integer> statMONTHShopping = new ArrayList<>();
+
         for(int i = 0; i < YEAR.size(); i++)
         {
             int resultatRequete = user.StatisticYear(YEAR.get(i));
+            int resultatRequeteShopping = shoppingBag.StatisticYear(YEAR.get(i));
             statYEAR.add(resultatRequete);
+            statYEARShopping.add(resultatRequeteShopping);
         }
 
         for(int i = 0; i < MONTH.size(); i++)
         {
             int resultatRequete = user.StatisticMonth(i+1, option);
+            int resultatRequeteShopping = shoppingBag.StatisticMonth(i+1, option);
             statMONTH.add(resultatRequete);
+            statMONTHShopping.add(resultatRequeteShopping);
         }
 
         session.setAttribute("option", option);
@@ -180,6 +187,8 @@ public class AllController extends HttpServlet {
         session.setAttribute("MONTH", MONTH);
         session.setAttribute("listStatYEAR", statYEAR);
         session.setAttribute("listStatMONTH", statMONTH);
+        session.setAttribute("listStatYEARShopping", statYEARShopping);
+        session.setAttribute("listStatMONTHShopping", statMONTHShopping);
         session.setAttribute("option", Integer.valueOf(option));
 
 
@@ -231,6 +240,7 @@ public class AllController extends HttpServlet {
         User u = (User) session.getAttribute("user");
         model.addAttribute("produces",produce.findByUserID(u));
         model.addAttribute("produce", findProd);
+        model.addAttribute("commande",shoppingBag.findCommandToTrader(u));
         return "TRADER/traderEdit";
     }
     @RequestMapping("/updateProduce")
@@ -355,6 +365,17 @@ public class AllController extends HttpServlet {
 
         return "CONSUMER/consumerCommand";
     }
+    @RequestMapping("/search")
+    public String search(@RequestParam String search, Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        List<Produce> commandDetails = produce.search(search);
+        List<User> userList = user.search(search);
+        model.addAttribute("commandDetails", commandDetails);
+
+
+
+        return "CONSUMER/consumerCommand";
+    }
 
     //TRADER x CONSUMER x ADMIN
 
@@ -379,6 +400,47 @@ public class AllController extends HttpServlet {
         user.update(u);
         session.setAttribute("user", u);
         return "index";
+    }
+    @RequestMapping("/redirection")
+    public String redirection(Model model, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        HttpSession session = request.getSession();
+        User userValidation = (User) session.getAttribute("user");
+
+        if(userValidation != null)
+        {
+            session.setAttribute("user", userValidation);
+            if(userValidation.getAdmin() == true)
+            {
+                model.addAttribute("traders",user.findAllTraders());
+                model.addAttribute("consumers",user.findAllConsumers());
+                return "ADMIN/admin";
+            }
+
+            else if(userValidation.getTrader() == true)
+            {
+                if(userValidation.getTraderValidation() == false)
+                {
+                    return "TRADER/traderNotValidate";
+                }
+                else
+                {
+                    model.addAttribute("produces",produce.findByUserID(userValidation));
+                    model.addAttribute("produce", new Produce());
+                    model.addAttribute("commande",shoppingBag.findCommandToTrader(userValidation));
+                    return "TRADER/trader";
+                }
+
+            }
+            else
+            {
+                model.addAttribute("produces",produce.findNotReserve(userValidation));
+                return "CONSUMER/consumer";
+            }
+        }
+        else {return "index";}
+
+
     }
 
 }

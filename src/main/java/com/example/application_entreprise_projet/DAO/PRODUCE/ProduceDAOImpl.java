@@ -118,9 +118,9 @@ public class ProduceDAOImpl implements IProduceDAO{
         return listProduce;
     }
     @Override
-    public List<Produce> findProduceByUserID(User u) throws SQLException {
+    public List<Produce> findByUserID(User u) throws SQLException {
         List<Produce> listProduce = new ArrayList<>();
-        String sql = "SELECT p.id, name, category, price, expirationDate, sold FROM produce p WHERE userId = ?";
+        String sql = "SELECT p.id, name, category, price, expirationDate, sold FROM produce p WHERE userId = ? ORDER BY sold asc";
 
         connect();
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);

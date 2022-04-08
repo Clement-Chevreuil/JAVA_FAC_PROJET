@@ -11,12 +11,12 @@
 <html>
 <head>
     <title>Title</title>
+    <jsp:include page="../bootstrap.jsp" />
 </head>
 <body>
-<a href="Deconnexion">Deconnexion</a>
-<a href="ConsumerIndex">Accueil</a>
+<jsp:include page="../navbar.jsp" />
 
-<table>
+<table class="table table-secondary table-striped">
     <h1>Shopping Bag</h1>
     <tr>
         <th>NAME</th>
@@ -36,7 +36,7 @@
 
 <form action="ShoppingBagValidation">
     <input type="date" name="dateClick">
-    <button type="submit"/>
+    <button class="btn btn-secondary" type="submit">Validate</button>
 </form>
 
 </body>
